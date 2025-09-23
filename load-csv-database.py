@@ -5,7 +5,7 @@ from sqlalchemy import create_engine
 
 # ---------- CONFIG ----------
 DB_URL  = "postgresql+psycopg2://jdd48774:bana@127.0.0.1:5435/project650"
-DATA_DIR = "/Users/jdd48774/Documents/_BANA3/healthcare/hospitaldata5"  # folder with CSV/CSV.GZ
+DATA_DIR = "/Users/jdd48774/Downloads/raw_data5kbs"  # folder with CSV/CSV.GZ
 ENGINE   = create_engine(DB_URL, future=True)
 
 # Map charge suffix -> canonical price_type

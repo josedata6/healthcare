@@ -26,6 +26,51 @@
         "documentation": {}
     },
     {
+        "label": "read_first_two_lines",
+        "kind": 2,
+        "importPath": "clean-csv-hospitalData",
+        "description": "clean-csv-hospitalData",
+        "peekOfCode": "def read_first_two_lines(path):\n    \"\"\"Return the first two lines and the rest of the file as text.\"\"\"\n    if path.endswith(\".gz\"):\n        with gzip.open(path, \"rt\", errors=\"replace\") as f:\n            l1 = f.readline().strip()\n            l2 = f.readline().strip()\n            rest = f.read()\n        return l1, l2, rest\n    else:\n        with open(path, \"r\", encoding=\"utf-8\", errors=\"replace\") as f:",
+        "detail": "clean-csv-hospitalData",
+        "documentation": {}
+    },
+    {
+        "label": "clean_one_file",
+        "kind": 2,
+        "importPath": "clean-csv-hospitalData",
+        "description": "clean-csv-hospitalData",
+        "peekOfCode": "def clean_one_file(src, dst, force_gzip=False):\n    \"\"\"Clean one CSV: strip top 2 rows, add as metadata column, write to dst.\"\"\"\n    os.makedirs(os.path.dirname(dst), exist_ok=True)\n    meta1, meta2, _ = read_first_two_lines(src)\n    metadata_text = f\"{meta1} | {meta2}\".strip(\" |\")\n    # Read file with pandas, skipping first 2 rows\n    read_kwargs = dict(\n        dtype=str,\n        sep=None,              # auto-detect delimiter\n        engine=\"python\",",
+        "detail": "clean-csv-hospitalData",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "clean-csv-hospitalData",
+        "description": "clean-csv-hospitalData",
+        "peekOfCode": "def main():\n    files = []\n    for pat in (\"*.csv\", \"*.csv.gz\"):\n        files.extend(glob.glob(os.path.join(IN_DIR, pat)))\n    if not files:\n        print(f\"  No files found in {IN_DIR}\")\n        return\n    print(f\"Found {len(files)} file(s). Cleaning into {OUT_DIR} …\")\n    for src in sorted(files):\n        rel = os.path.relpath(src, IN_DIR)",
+        "detail": "clean-csv-hospitalData",
+        "documentation": {}
+    },
+    {
+        "label": "OUT_DIR",
+        "kind": 5,
+        "importPath": "clean-csv-hospitalData",
+        "description": "clean-csv-hospitalData",
+        "peekOfCode": "OUT_DIR = \"/Users/jdd48774/Documents/_BANA3/healthcare/hospitaldata_clean\" # cleaned files\nFORCE_GZIP = True   # set to True if you want all output as .csv.gz\n# ---------- Helpers ----------\ndef read_first_two_lines(path):\n    \"\"\"Return the first two lines and the rest of the file as text.\"\"\"\n    if path.endswith(\".gz\"):\n        with gzip.open(path, \"rt\", errors=\"replace\") as f:\n            l1 = f.readline().strip()\n            l2 = f.readline().strip()\n            rest = f.read()",
+        "detail": "clean-csv-hospitalData",
+        "documentation": {}
+    },
+    {
+        "label": "FORCE_GZIP",
+        "kind": 5,
+        "importPath": "clean-csv-hospitalData",
+        "description": "clean-csv-hospitalData",
+        "peekOfCode": "FORCE_GZIP = True   # set to True if you want all output as .csv.gz\n# ---------- Helpers ----------\ndef read_first_two_lines(path):\n    \"\"\"Return the first two lines and the rest of the file as text.\"\"\"\n    if path.endswith(\".gz\"):\n        with gzip.open(path, \"rt\", errors=\"replace\") as f:\n            l1 = f.readline().strip()\n            l2 = f.readline().strip()\n            rest = f.read()\n        return l1, l2, rest",
+        "detail": "clean-csv-hospitalData",
+        "documentation": {}
+    },
+    {
         "label": "open_any",
         "kind": 2,
         "importPath": "load-csv-database",
@@ -120,7 +165,7 @@
         "kind": 5,
         "importPath": "load-csv-database",
         "description": "load-csv-database",
-        "peekOfCode": "DATA_DIR = \"/Users/jdd48774/Documents/_BANA3/healthcare/hospitaldata5\"  # folder with CSV/CSV.GZ\nENGINE   = create_engine(DB_URL, future=True)\n# Map charge suffix -> canonical price_type\nPRICE_TYPE_MAP = {\n    \"gross\": \"chargemaster\",\n    \"gross_charge\": \"chargemaster\",\n    \"gross_charges\": \"chargemaster\",\n    \"discounted_cash\": \"cash\",\n    \"negotiated_dollar\": \"negotiated\",\n    \"negotiated_percentage\": \"percentage\",",
+        "peekOfCode": "DATA_DIR = \"/Users/jdd48774/Downloads/raw_data5kbs\"  # folder with CSV/CSV.GZ\nENGINE   = create_engine(DB_URL, future=True)\n# Map charge suffix -> canonical price_type\nPRICE_TYPE_MAP = {\n    \"gross\": \"chargemaster\",\n    \"gross_charge\": \"chargemaster\",\n    \"gross_charges\": \"chargemaster\",\n    \"discounted_cash\": \"cash\",\n    \"negotiated_dollar\": \"negotiated\",\n    \"negotiated_percentage\": \"percentage\",",
         "detail": "load-csv-database",
         "documentation": {}
     },
