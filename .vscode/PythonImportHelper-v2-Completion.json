@@ -26,20 +26,47 @@
         "documentation": {}
     },
     {
-        "label": "read_first_lines",
+        "label": "open_text",
         "kind": 2,
         "importPath": "clean-csv-hospitalData",
         "description": "clean-csv-hospitalData",
-        "peekOfCode": "def read_first_lines(path, n=3):\n    \"\"\"Return the first n lines of a file as list of strings.\"\"\"\n    opener = gzip.open if path.endswith(\".gz\") else open\n    with opener(path, \"rt\", errors=\"replace\", encoding=\"utf-8\") as f:\n        return [f.readline().strip() for _ in range(n)]\ndef should_strip_metadata(lines):\n    \"\"\"\n    Decide if first 2 rows are metadata (not real headers).\n    Returns True if we should strip them.\n    \"\"\"",
+        "peekOfCode": "def open_text(path):\n    if path.lower().endswith(\".gz\"):\n        return gzip.open(path, \"rt\", errors=\"replace\", encoding=\"utf-8\")\n    return open(path, \"r\", errors=\"replace\", encoding=\"utf-8\")\ndef first_lines(path, n=3):\n    with open_text(path) as f:\n        return [f.readline() for _ in range(n)]\ndef normalize(s: str) -> str:\n    if not isinstance(s, str):\n        s = str(s)",
         "detail": "clean-csv-hospitalData",
         "documentation": {}
     },
     {
-        "label": "should_strip_metadata",
+        "label": "first_lines",
         "kind": 2,
         "importPath": "clean-csv-hospitalData",
         "description": "clean-csv-hospitalData",
-        "peekOfCode": "def should_strip_metadata(lines):\n    \"\"\"\n    Decide if first 2 rows are metadata (not real headers).\n    Returns True if we should strip them.\n    \"\"\"\n    header_line = lines[0].lower() if lines else \"\"\n    # If the first line already has expected headers, keep it\n    if any(h in header_line for h in EXPECTED_HEADERS):\n        return False\n    return True",
+        "peekOfCode": "def first_lines(path, n=3):\n    with open_text(path) as f:\n        return [f.readline() for _ in range(n)]\ndef normalize(s: str) -> str:\n    if not isinstance(s, str):\n        s = str(s)\n    # unify whitespace and separators for matching\n    s = s.replace(\"\\u00A0\", \" \")       # NBSP -> space\n    s = s.replace(\"\\u2007\", \" \")       # figure space\n    s = s.replace(\"\\u202F\", \" \")       # narrow NBSP",
+        "detail": "clean-csv-hospitalData",
+        "documentation": {}
+    },
+    {
+        "label": "normalize",
+        "kind": 2,
+        "importPath": "clean-csv-hospitalData",
+        "description": "clean-csv-hospitalData",
+        "peekOfCode": "def normalize(s: str) -> str:\n    if not isinstance(s, str):\n        s = str(s)\n    # unify whitespace and separators for matching\n    s = s.replace(\"\\u00A0\", \" \")       # NBSP -> space\n    s = s.replace(\"\\u2007\", \" \")       # figure space\n    s = s.replace(\"\\u202F\", \" \")       # narrow NBSP\n    s = re.sub(r\"\\s+\", \" \", s)\n    s = s.strip().lower()\n    return s",
+        "detail": "clean-csv-hospitalData",
+        "documentation": {}
+    },
+    {
+        "label": "score_header",
+        "kind": 2,
+        "importPath": "clean-csv-hospitalData",
+        "description": "clean-csv-hospitalData",
+        "peekOfCode": "def score_header(raw_header_line: str) -> int:\n    \"\"\"Give a higher score if header looks like a charge file header, not admin.\"\"\"\n    h = normalize(raw_header_line)\n    score = 0\n    # reward pricing tokens\n    for tok in EXPECTED_TOKENS:\n        if tok in h:\n            score += 2\n    # penalize if it's clearly admin-y\n    for tok in ADMIN_HINTS:",
+        "detail": "clean-csv-hospitalData",
+        "documentation": {}
+    },
+    {
+        "label": "read_csv_pass",
+        "kind": 2,
+        "importPath": "clean-csv-hospitalData",
+        "description": "clean-csv-hospitalData",
+        "peekOfCode": "def read_csv_pass(path, skiprows=0):\n    \"\"\"Read with pandas in a tolerant way (autodetect delimiter).\"\"\"\n    return pd.read_csv(\n        open_text(path),\n        dtype=str,\n        sep=None, engine=\"python\",  # autodetect delimiter\n        quotechar='\"',\n        on_bad_lines=\"skip\",\n        skipinitialspace=True,\n        keep_default_na=False,",
         "detail": "clean-csv-hospitalData",
         "documentation": {}
     },
@@ -48,7 +75,7 @@
         "kind": 2,
         "importPath": "clean-csv-hospitalData",
         "description": "clean-csv-hospitalData",
-        "peekOfCode": "def clean_one_file(src, dst, force_gzip=False):\n    os.makedirs(os.path.dirname(dst), exist_ok=True)\n    # Peek at first 3 lines\n    lines = read_first_lines(src, n=3)\n    if should_strip_metadata(lines):\n        print(f\"   → stripping top 2 rows from {os.path.basename(src)}\")\n        skiprows = 2\n        meta1, meta2 = lines[0], lines[1]\n        metadata_text = f\"{meta1} | {meta2}\".strip(\" |\")\n    else:",
+        "peekOfCode": "def clean_one_file(src_path, out_path):\n    os.makedirs(os.path.dirname(out_path), exist_ok=True)\n    # Pass A: assume first row is header\n    lines = first_lines(src_path, n=3)\n    line1 = lines[0] if lines else \"\"\n    score_A = score_header(line1)\n    # Pass B: strip the first 2 rows (common WA admin header + attestation)\n    line3 = lines[2] if len(lines) >= 3 else \"\"\n    score_B = score_header(line3)\n    # If Pass B header looks more like a pricing header, use Pass B",
         "detail": "clean-csv-hospitalData",
         "documentation": {}
     },
@@ -57,7 +84,7 @@
         "kind": 2,
         "importPath": "clean-csv-hospitalData",
         "description": "clean-csv-hospitalData",
-        "peekOfCode": "def main():\n    files = []\n    for pat in (\"*.csv\", \"*.csv.gz\"):\n        files.extend(glob.glob(os.path.join(IN_DIR, pat)))\n    if not files:\n        print(f\"  No files found in {IN_DIR}\")\n        return\n    print(f\"Found {len(files)} file(s). Cleaning into {OUT_DIR} …\")\n    for src in sorted(files):\n        rel = os.path.relpath(src, IN_DIR)",
+        "peekOfCode": "def main():\n    files = []\n    for pat in (\"*.csv\", \"*.csv.gz\"):\n        files.extend(glob.glob(os.path.join(IN_DIR, pat)))\n    if not files:\n        print(f\"⚠️  No files found in {IN_DIR}\")\n        return\n    print(f\"Found {len(files)} file(s). Cleaning into {OUT_DIR} …\")\n    for src in sorted(files):\n        rel = os.path.relpath(src, IN_DIR)",
         "detail": "clean-csv-hospitalData",
         "documentation": {}
     },
@@ -66,7 +93,7 @@
         "kind": 5,
         "importPath": "clean-csv-hospitalData",
         "description": "clean-csv-hospitalData",
-        "peekOfCode": "OUT_DIR = \"/Users/jdd48774/Documents/_BANA3/healthcare/hospitaldata_clean\" # cleaned files\nFORCE_GZIP = True   # True → output .csv.gz, False → plain .csv\n# Keywords we expect in a valid header row\nEXPECTED_HEADERS = [\n    \"description\", \"code|1\", \"code|1|type\", \"standard_charge|gross\",\n    \"standard_charge|discounted_cash\", \"payer_name\", \"plan_name\"\n]\ndef read_first_lines(path, n=3):\n    \"\"\"Return the first n lines of a file as list of strings.\"\"\"\n    opener = gzip.open if path.endswith(\".gz\") else open",
+        "peekOfCode": "OUT_DIR = \"/Users/jdd48774/Downloads/hospitaldata_clean\" # cleaned folder\nFORCE_GZIP = True  # True -> write .csv.gz\n# Pricing/structure headers we expect in a REAL header row\nEXPECTED_TOKENS = {\n    \"description\", \"code|\", \"code|1\", \"code|1|type\", \"code|2\", \"code|2|type\",\n    \"standard_charge\", \"standard_charge|gross\", \"standard_charge|discounted_cash\",\n    \"standard_charge|negotiated_dollar\", \"standard_charge|negotiated_percentage\",\n    \"standard_charge|min\", \"standard_charge|max\",\n    \"payer_name\", \"plan_name\", \"billing_class\", \"setting\", \"currency\",\n}",
         "detail": "clean-csv-hospitalData",
         "documentation": {}
     },
@@ -75,16 +102,25 @@
         "kind": 5,
         "importPath": "clean-csv-hospitalData",
         "description": "clean-csv-hospitalData",
-        "peekOfCode": "FORCE_GZIP = True   # True → output .csv.gz, False → plain .csv\n# Keywords we expect in a valid header row\nEXPECTED_HEADERS = [\n    \"description\", \"code|1\", \"code|1|type\", \"standard_charge|gross\",\n    \"standard_charge|discounted_cash\", \"payer_name\", \"plan_name\"\n]\ndef read_first_lines(path, n=3):\n    \"\"\"Return the first n lines of a file as list of strings.\"\"\"\n    opener = gzip.open if path.endswith(\".gz\") else open\n    with opener(path, \"rt\", errors=\"replace\", encoding=\"utf-8\") as f:",
+        "peekOfCode": "FORCE_GZIP = True  # True -> write .csv.gz\n# Pricing/structure headers we expect in a REAL header row\nEXPECTED_TOKENS = {\n    \"description\", \"code|\", \"code|1\", \"code|1|type\", \"code|2\", \"code|2|type\",\n    \"standard_charge\", \"standard_charge|gross\", \"standard_charge|discounted_cash\",\n    \"standard_charge|negotiated_dollar\", \"standard_charge|negotiated_percentage\",\n    \"standard_charge|min\", \"standard_charge|max\",\n    \"payer_name\", \"plan_name\", \"billing_class\", \"setting\", \"currency\",\n}\n# “Admin-only” tokens that frequently show up in those top 2 rows (metadata)",
         "detail": "clean-csv-hospitalData",
         "documentation": {}
     },
     {
-        "label": "EXPECTED_HEADERS",
+        "label": "EXPECTED_TOKENS",
         "kind": 5,
         "importPath": "clean-csv-hospitalData",
         "description": "clean-csv-hospitalData",
-        "peekOfCode": "EXPECTED_HEADERS = [\n    \"description\", \"code|1\", \"code|1|type\", \"standard_charge|gross\",\n    \"standard_charge|discounted_cash\", \"payer_name\", \"plan_name\"\n]\ndef read_first_lines(path, n=3):\n    \"\"\"Return the first n lines of a file as list of strings.\"\"\"\n    opener = gzip.open if path.endswith(\".gz\") else open\n    with opener(path, \"rt\", errors=\"replace\", encoding=\"utf-8\") as f:\n        return [f.readline().strip() for _ in range(n)]\ndef should_strip_metadata(lines):",
+        "peekOfCode": "EXPECTED_TOKENS = {\n    \"description\", \"code|\", \"code|1\", \"code|1|type\", \"code|2\", \"code|2|type\",\n    \"standard_charge\", \"standard_charge|gross\", \"standard_charge|discounted_cash\",\n    \"standard_charge|negotiated_dollar\", \"standard_charge|negotiated_percentage\",\n    \"standard_charge|min\", \"standard_charge|max\",\n    \"payer_name\", \"plan_name\", \"billing_class\", \"setting\", \"currency\",\n}\n# “Admin-only” tokens that frequently show up in those top 2 rows (metadata)\nADMIN_HINTS = {\n    \"hospital_name\", \"last_updated_on\", \"hospital_location\", \"hospital_address\",",
+        "detail": "clean-csv-hospitalData",
+        "documentation": {}
+    },
+    {
+        "label": "ADMIN_HINTS",
+        "kind": 5,
+        "importPath": "clean-csv-hospitalData",
+        "description": "clean-csv-hospitalData",
+        "peekOfCode": "ADMIN_HINTS = {\n    \"hospital_name\", \"last_updated_on\", \"hospital_location\", \"hospital_address\",\n    \"license_number|\", \"license_number|wa\", \"version\",\n    \"to the best of its knowledge\",  # attestation text\n    \"45 cfr 180.50\", \"attestation\", \"standard charge information\"\n}\n# ============================================\ndef open_text(path):\n    if path.lower().endswith(\".gz\"):\n        return gzip.open(path, \"rt\", errors=\"replace\", encoding=\"utf-8\")",
         "detail": "clean-csv-hospitalData",
         "documentation": {}
     },
