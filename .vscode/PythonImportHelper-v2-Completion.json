@@ -26,11 +26,20 @@
         "documentation": {}
     },
     {
-        "label": "read_first_two_lines",
+        "label": "read_first_lines",
         "kind": 2,
         "importPath": "clean-csv-hospitalData",
         "description": "clean-csv-hospitalData",
-        "peekOfCode": "def read_first_two_lines(path):\n    \"\"\"Return the first two lines and the rest of the file as text.\"\"\"\n    if path.endswith(\".gz\"):\n        with gzip.open(path, \"rt\", errors=\"replace\") as f:\n            l1 = f.readline().strip()\n            l2 = f.readline().strip()\n            rest = f.read()\n        return l1, l2, rest\n    else:\n        with open(path, \"r\", encoding=\"utf-8\", errors=\"replace\") as f:",
+        "peekOfCode": "def read_first_lines(path, n=3):\n    \"\"\"Return the first n lines of a file as list of strings.\"\"\"\n    opener = gzip.open if path.endswith(\".gz\") else open\n    with opener(path, \"rt\", errors=\"replace\", encoding=\"utf-8\") as f:\n        return [f.readline().strip() for _ in range(n)]\ndef should_strip_metadata(lines):\n    \"\"\"\n    Decide if first 2 rows are metadata (not real headers).\n    Returns True if we should strip them.\n    \"\"\"",
+        "detail": "clean-csv-hospitalData",
+        "documentation": {}
+    },
+    {
+        "label": "should_strip_metadata",
+        "kind": 2,
+        "importPath": "clean-csv-hospitalData",
+        "description": "clean-csv-hospitalData",
+        "peekOfCode": "def should_strip_metadata(lines):\n    \"\"\"\n    Decide if first 2 rows are metadata (not real headers).\n    Returns True if we should strip them.\n    \"\"\"\n    header_line = lines[0].lower() if lines else \"\"\n    # If the first line already has expected headers, keep it\n    if any(h in header_line for h in EXPECTED_HEADERS):\n        return False\n    return True",
         "detail": "clean-csv-hospitalData",
         "documentation": {}
     },
@@ -39,7 +48,7 @@
         "kind": 2,
         "importPath": "clean-csv-hospitalData",
         "description": "clean-csv-hospitalData",
-        "peekOfCode": "def clean_one_file(src, dst, force_gzip=False):\n    \"\"\"Clean one CSV: strip top 2 rows, add as metadata column, write to dst.\"\"\"\n    os.makedirs(os.path.dirname(dst), exist_ok=True)\n    meta1, meta2, _ = read_first_two_lines(src)\n    metadata_text = f\"{meta1} | {meta2}\".strip(\" |\")\n    # Read file with pandas, skipping first 2 rows\n    read_kwargs = dict(\n        dtype=str,\n        sep=None,              # auto-detect delimiter\n        engine=\"python\",",
+        "peekOfCode": "def clean_one_file(src, dst, force_gzip=False):\n    os.makedirs(os.path.dirname(dst), exist_ok=True)\n    # Peek at first 3 lines\n    lines = read_first_lines(src, n=3)\n    if should_strip_metadata(lines):\n        print(f\"   → stripping top 2 rows from {os.path.basename(src)}\")\n        skiprows = 2\n        meta1, meta2 = lines[0], lines[1]\n        metadata_text = f\"{meta1} | {meta2}\".strip(\" |\")\n    else:",
         "detail": "clean-csv-hospitalData",
         "documentation": {}
     },
@@ -57,7 +66,7 @@
         "kind": 5,
         "importPath": "clean-csv-hospitalData",
         "description": "clean-csv-hospitalData",
-        "peekOfCode": "OUT_DIR = \"/Users/jdd48774/Documents/_BANA3/healthcare/hospitaldata_clean\" # cleaned files\nFORCE_GZIP = True   # set to True if you want all output as .csv.gz\n# ---------- Helpers ----------\ndef read_first_two_lines(path):\n    \"\"\"Return the first two lines and the rest of the file as text.\"\"\"\n    if path.endswith(\".gz\"):\n        with gzip.open(path, \"rt\", errors=\"replace\") as f:\n            l1 = f.readline().strip()\n            l2 = f.readline().strip()\n            rest = f.read()",
+        "peekOfCode": "OUT_DIR = \"/Users/jdd48774/Documents/_BANA3/healthcare/hospitaldata_clean\" # cleaned files\nFORCE_GZIP = True   # True → output .csv.gz, False → plain .csv\n# Keywords we expect in a valid header row\nEXPECTED_HEADERS = [\n    \"description\", \"code|1\", \"code|1|type\", \"standard_charge|gross\",\n    \"standard_charge|discounted_cash\", \"payer_name\", \"plan_name\"\n]\ndef read_first_lines(path, n=3):\n    \"\"\"Return the first n lines of a file as list of strings.\"\"\"\n    opener = gzip.open if path.endswith(\".gz\") else open",
         "detail": "clean-csv-hospitalData",
         "documentation": {}
     },
@@ -66,7 +75,16 @@
         "kind": 5,
         "importPath": "clean-csv-hospitalData",
         "description": "clean-csv-hospitalData",
-        "peekOfCode": "FORCE_GZIP = True   # set to True if you want all output as .csv.gz\n# ---------- Helpers ----------\ndef read_first_two_lines(path):\n    \"\"\"Return the first two lines and the rest of the file as text.\"\"\"\n    if path.endswith(\".gz\"):\n        with gzip.open(path, \"rt\", errors=\"replace\") as f:\n            l1 = f.readline().strip()\n            l2 = f.readline().strip()\n            rest = f.read()\n        return l1, l2, rest",
+        "peekOfCode": "FORCE_GZIP = True   # True → output .csv.gz, False → plain .csv\n# Keywords we expect in a valid header row\nEXPECTED_HEADERS = [\n    \"description\", \"code|1\", \"code|1|type\", \"standard_charge|gross\",\n    \"standard_charge|discounted_cash\", \"payer_name\", \"plan_name\"\n]\ndef read_first_lines(path, n=3):\n    \"\"\"Return the first n lines of a file as list of strings.\"\"\"\n    opener = gzip.open if path.endswith(\".gz\") else open\n    with opener(path, \"rt\", errors=\"replace\", encoding=\"utf-8\") as f:",
+        "detail": "clean-csv-hospitalData",
+        "documentation": {}
+    },
+    {
+        "label": "EXPECTED_HEADERS",
+        "kind": 5,
+        "importPath": "clean-csv-hospitalData",
+        "description": "clean-csv-hospitalData",
+        "peekOfCode": "EXPECTED_HEADERS = [\n    \"description\", \"code|1\", \"code|1|type\", \"standard_charge|gross\",\n    \"standard_charge|discounted_cash\", \"payer_name\", \"plan_name\"\n]\ndef read_first_lines(path, n=3):\n    \"\"\"Return the first n lines of a file as list of strings.\"\"\"\n    opener = gzip.open if path.endswith(\".gz\") else open\n    with opener(path, \"rt\", errors=\"replace\", encoding=\"utf-8\") as f:\n        return [f.readline().strip() for _ in range(n)]\ndef should_strip_metadata(lines):",
         "detail": "clean-csv-hospitalData",
         "documentation": {}
     },
