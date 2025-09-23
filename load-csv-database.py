@@ -5,7 +5,7 @@ from sqlalchemy import create_engine
 
 # ---------- CONFIG ----------
 DB_URL  = "postgresql+psycopg2://jdd48774:bana@127.0.0.1:5435/project650"
-DATA_DIR = "/Users/jdd48774/Documents/_BANA3/healthcare/hospitaldata5" ## path for files to load
+DATA_DIR = "/Users/jdd48774/Documents/_BANA3/healthcare/hospitaldata5"  # folder with CSV/CSV.GZ
 ENGINE   = create_engine(DB_URL, future=True)
 
 # Map charge suffix -> canonical price_type
@@ -123,6 +123,49 @@ def _base_name(name):
     # strip our dedupe suffix like "__1"
     return name.split("__", 1)[0]
 
+# ---------- Hospital name inference ----------
+_BOILER_PATTERNS = [
+    r"standard[_-]?charges?", r"machine[_-]?readable",
+    r"(price|prices?)", r"chargemaster", r"cdm",
+    r"inpatient", r"outpatient", r"shoppable"
+]
+
+def guess_hospital_name_from_filename(path: str) -> str:
+    """
+    Heuristics to turn filenames like:
+      '911352172_mary-bridge-childrens-hospital_standardcharges.csv'
+      '91-0750229_Mid-Valley_Hospital_standardcharges.csv'
+      '20250115_Providence_Sacred_Heart_standard_charges.csv.gz'
+    into: 'Mary Bridge Childrens Hospital', 'Mid Valley Hospital', 'Providence Sacred Heart'
+    """
+    base = os.path.basename(path)
+    base = re.sub(r"\.csv(\.gz)?$", "", base, flags=re.IGNORECASE)
+
+    # Replace separators with spaces
+    s = base.replace("_", " ").replace("-", " ")
+
+    # Remove leading IDs/EINs/dates like '91-0750229 ' or '20250115 '
+    s = re.sub(r"^[0-9]{2}-[0-9]{7}\s+", "", s)      # EIN style
+    s = re.sub(r"^[0-9]{8}\s+", "", s)               # YYYYMMDD
+    s = re.sub(r"^[0-9]{9}\s+", "", s)               # 9-digit id
+    s = re.sub(r"^[0-9]+\s+", "", s)                 # any leading number blob
+
+    # Remove boilerplate tokens anywhere
+    for pat in _BOILER_PATTERNS:
+        s = re.sub(rf"\b{pat}\b", " ", s, flags=re.IGNORECASE)
+
+    # Collapse multiple spaces and trim
+    s = re.sub(r"\s+", " ", s).strip()
+
+    # Title-case; keep “WA”, “USA”, etc. if present (simple approach)
+    s = s.title()
+
+    # If nothing left, fallback to original base (title-cased)
+    if not s:
+        s = os.path.splitext(os.path.basename(path))[0].replace("_", " ").replace("-", " ").title()
+
+    return s
+
 # ---------- Melt & normalize ----------
 def melt_and_normalize(df: pd.DataFrame, hospital_name: str) -> pd.DataFrame:
     # 0) normalize and dedupe headers
@@ -162,7 +205,7 @@ def melt_and_normalize(df: pd.DataFrame, hospital_name: str) -> pd.DataFrame:
     # detect charge columns by pattern
     charge_cols = [c for c in cols if is_charge_col(c)]
     if not charge_cols:
-        print("   ⚠️  No standard_charge-like columns detected; skipping this file.")
+        print("  No standard_charge-like columns detected; skipping this file.")
         return pd.DataFrame(columns=[
             "hospital_name","code","code_type","payer_name","billing_class",
             "price_type","price_amount","currency","effective_date","expires_on","description","notes"
@@ -231,7 +274,7 @@ def melt_and_normalize(df: pd.DataFrame, hospital_name: str) -> pd.DataFrame:
     long_df["code_type"] = long_df["code_type_any"]
     long_df.drop(columns=["code_any","code_type_any"], inplace=True)
 
-    # description fallback from aliases if needed
+    # description fallback
     if "description" not in long_df.columns:
         long_df["description"] = ""
 
@@ -326,16 +369,16 @@ def main():
         return
 
     for path in files:
-        hosp = input(f"Hospital name for {os.path.basename(path)}: ").strip()
-        print(f"--> Processing {os.path.basename(path)} for hospital={hosp}")
+        hosp = guess_hospital_name_from_filename(path)
+        print(f"--> Processing {os.path.basename(path)}  |  inferred hospital: {hosp}")
         df = read_csv_any(path)
         tidy = melt_and_normalize(df, hospital_name=hosp)
         if tidy.empty:
-            print("   ⚠️  No price rows produced; skipping.")
+            print("No price rows produced; skipping!!!!")
             continue
         copy_to_single_table(tidy, os.path.basename(path))
 
-    print("✅ All files loaded into public.hospital_prices.")
+    print("All files loaded into public.hospital_prices.")
 
 if __name__ == "__main__":
     main()

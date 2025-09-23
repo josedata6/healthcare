@@ -80,6 +80,15 @@
         "documentation": {}
     },
     {
+        "label": "guess_hospital_name_from_filename",
+        "kind": 2,
+        "importPath": "load-csv-database",
+        "description": "load-csv-database",
+        "peekOfCode": "def guess_hospital_name_from_filename(path: str) -> str:\n    \"\"\"\n    Heuristics to turn filenames like:\n      '911352172_mary-bridge-childrens-hospital_standardcharges.csv'\n      '91-0750229_Mid-Valley_Hospital_standardcharges.csv'\n      '20250115_Providence_Sacred_Heart_standard_charges.csv.gz'\n    into: 'Mary Bridge Childrens Hospital', 'Mid Valley Hospital', 'Providence Sacred Heart'\n    \"\"\"\n    base = os.path.basename(path)\n    base = re.sub(r\"\\.csv(\\.gz)?$\", \"\", base, flags=re.IGNORECASE)",
+        "detail": "load-csv-database",
+        "documentation": {}
+    },
+    {
         "label": "melt_and_normalize",
         "kind": 2,
         "importPath": "load-csv-database",
@@ -102,7 +111,7 @@
         "kind": 2,
         "importPath": "load-csv-database",
         "description": "load-csv-database",
-        "peekOfCode": "def main():\n    files = sorted(glob.glob(os.path.join(DATA_DIR, \"*.csv\")) + glob.glob(os.path.join(DATA_DIR, \"*.csv.gz\")))\n    if not files:\n        print(\"No files found in\", DATA_DIR)\n        return\n    for path in files:\n        hosp = input(f\"Hospital name for {os.path.basename(path)}: \").strip()\n        print(f\"--> Processing {os.path.basename(path)} for hospital={hosp}\")\n        df = read_csv_any(path)\n        tidy = melt_and_normalize(df, hospital_name=hosp)",
+        "peekOfCode": "def main():\n    files = sorted(glob.glob(os.path.join(DATA_DIR, \"*.csv\")) + glob.glob(os.path.join(DATA_DIR, \"*.csv.gz\")))\n    if not files:\n        print(\"No files found in\", DATA_DIR)\n        return\n    for path in files:\n        hosp = guess_hospital_name_from_filename(path)\n        print(f\"--> Processing {os.path.basename(path)}  |  inferred hospital: {hosp}\")\n        df = read_csv_any(path)\n        tidy = melt_and_normalize(df, hospital_name=hosp)",
         "detail": "load-csv-database",
         "documentation": {}
     },
@@ -111,7 +120,7 @@
         "kind": 5,
         "importPath": "load-csv-database",
         "description": "load-csv-database",
-        "peekOfCode": "DATA_DIR = \"/Users/jdd48774/Documents/_BANA3/healthcare/hospitaldata5\" ## path for files to load\nENGINE   = create_engine(DB_URL, future=True)\n# Map charge suffix -> canonical price_type\nPRICE_TYPE_MAP = {\n    \"gross\": \"chargemaster\",\n    \"gross_charge\": \"chargemaster\",\n    \"gross_charges\": \"chargemaster\",\n    \"discounted_cash\": \"cash\",\n    \"negotiated_dollar\": \"negotiated\",\n    \"negotiated_percentage\": \"percentage\",",
+        "peekOfCode": "DATA_DIR = \"/Users/jdd48774/Documents/_BANA3/healthcare/hospitaldata5\"  # folder with CSV/CSV.GZ\nENGINE   = create_engine(DB_URL, future=True)\n# Map charge suffix -> canonical price_type\nPRICE_TYPE_MAP = {\n    \"gross\": \"chargemaster\",\n    \"gross_charge\": \"chargemaster\",\n    \"gross_charges\": \"chargemaster\",\n    \"discounted_cash\": \"cash\",\n    \"negotiated_dollar\": \"negotiated\",\n    \"negotiated_percentage\": \"percentage\",",
         "detail": "load-csv-database",
         "documentation": {}
     },
@@ -121,6 +130,15 @@
         "importPath": "load-csv-database",
         "description": "load-csv-database",
         "peekOfCode": "PRICE_TYPE_MAP = {\n    \"gross\": \"chargemaster\",\n    \"gross_charge\": \"chargemaster\",\n    \"gross_charges\": \"chargemaster\",\n    \"discounted_cash\": \"cash\",\n    \"negotiated_dollar\": \"negotiated\",\n    \"negotiated_percentage\": \"percentage\",\n    \"min\": \"min\",\n    \"max\": \"max\",\n}",
+        "detail": "load-csv-database",
+        "documentation": {}
+    },
+    {
+        "label": "_BOILER_PATTERNS",
+        "kind": 5,
+        "importPath": "load-csv-database",
+        "description": "load-csv-database",
+        "peekOfCode": "_BOILER_PATTERNS = [\n    r\"standard[_-]?charges?\", r\"machine[_-]?readable\",\n    r\"(price|prices?)\", r\"chargemaster\", r\"cdm\",\n    r\"inpatient\", r\"outpatient\", r\"shoppable\"\n]\ndef guess_hospital_name_from_filename(path: str) -> str:\n    \"\"\"\n    Heuristics to turn filenames like:\n      '911352172_mary-bridge-childrens-hospital_standardcharges.csv'\n      '91-0750229_Mid-Valley_Hospital_standardcharges.csv'",
         "detail": "load-csv-database",
         "documentation": {}
     }
