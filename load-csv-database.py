@@ -22,7 +22,6 @@ PRICE_TYPE_MAP = {
 
 # ---------- File reading ----------
 def open_any(path: str):
-    """Open text or gzipped CSV as text, letting pandas handle encoding."""
     return gzip.open(path, "rt", errors="replace") if path.endswith(".gz") else open(path, "r", errors="replace")
 
 def _try_read(path: str, encoding: str, sep, engine: str):
@@ -40,7 +39,6 @@ def _try_read(path: str, encoding: str, sep, engine: str):
     return df
 
 def read_csv_any(path: str) -> pd.DataFrame:
-    """Robust CSV reader trying common encodings and delimiters."""
     for encoding in ("utf-8", "latin-1"):
         for sep in (None, ",", "\t", "|", ";"):
             try:
@@ -54,18 +52,12 @@ def read_csv_any(path: str) -> pd.DataFrame:
 # ---------- Header helpers ----------
 def normalize_header(col: str) -> str:
     c = str(col).strip().lower()
-    c = c.replace("-", "_")             # dashes → underscores
-    c = re.sub(r"\s*\|\s*", "|", c)     # " a | b " → "a|b"
-    c = re.sub(r"\s+", " ", c)          # collapse spaces
+    c = c.replace("-", "_")
+    c = re.sub(r"\s*\|\s*", "|", c)   # " a | b " → "a|b"
+    c = re.sub(r"\s+", " ", c)
     return c
 
 def is_charge_col(col: str) -> bool:
-    """
-    Accept many real-world variants:
-      - standard_charge|gross, standard charge|gross, standard_charge (no suffix)
-      - standard_charge|discounted_cash|min|max
-      - bare names: gross_charge, chargemaster, discounted_cash, negotiated_dollar, negotiated_percentage, min, max
-    """
     c = normalize_header(col)
     if c in ("standard_charge", "standard charge"):
         return True
@@ -79,9 +71,7 @@ def is_charge_col(col: str) -> bool:
     }
 
 def col_to_price_type_from_name(col: str) -> str:
-    """Map a (possibly deduped) charge column name to canonical price_type."""
     b = col.split("__", 1)[0]  # strip any __N suffix
-    # extract suffix after "standard_charge|"
     if "|" in b:
         suffix = b.split("|", 1)[1]
     else:
@@ -100,13 +90,6 @@ def col_to_price_type_from_name(col: str) -> str:
             suffix = "gross"
     return PRICE_TYPE_MAP.get(suffix, "chargemaster")
 
-def col_or_blank(df, col):
-    """Return df[col] if it exists, else a same-length Series of empty strings."""
-    if col in df.columns:
-        return df[col].fillna("")
-    else:
-        return pd.Series([""] * len(df), index=df.index)
-
 def _make_unique(names):
     seen = {}
     out = []
@@ -116,59 +99,33 @@ def _make_unique(names):
             out.append(n)
         else:
             seen[n] += 1
-            out.append(f"{n}__{seen[n]}")  # e.g., standard_charge|gross__1
+            out.append(f"{n}__{seen[n]}")
     return out
 
 def _base_name(name):
-    # strip our dedupe suffix like "__1"
     return name.split("__", 1)[0]
 
-# ---------- Hospital name inference ----------
+# ---------- filename → hospital name ----------
 _BOILER_PATTERNS = [
     r"standard[_-]?charges?", r"machine[_-]?readable",
     r"(price|prices?)", r"chargemaster", r"cdm",
     r"inpatient", r"outpatient", r"shoppable"
 ]
-
 def guess_hospital_name_from_filename(path: str) -> str:
-    """
-    Heuristics to turn filenames like:
-      '911352172_mary-bridge-childrens-hospital_standardcharges.csv'
-      '91-0750229_Mid-Valley_Hospital_standardcharges.csv'
-      '20250115_Providence_Sacred_Heart_standard_charges.csv.gz'
-    into: 'Mary Bridge Childrens Hospital', 'Mid Valley Hospital', 'Providence Sacred Heart'
-    """
     base = os.path.basename(path)
     base = re.sub(r"\.csv(\.gz)?$", "", base, flags=re.IGNORECASE)
-
-    # Replace separators with spaces
     s = base.replace("_", " ").replace("-", " ")
-
-    # Remove leading IDs/EINs/dates like '91-0750229 ' or '20250115 '
-    s = re.sub(r"^[0-9]{2}-[0-9]{7}\s+", "", s)      # EIN style
-    s = re.sub(r"^[0-9]{8}\s+", "", s)               # YYYYMMDD
-    s = re.sub(r"^[0-9]{9}\s+", "", s)               # 9-digit id
-    s = re.sub(r"^[0-9]+\s+", "", s)                 # any leading number blob
-
-    # Remove boilerplate tokens anywhere
+    s = re.sub(r"^[0-9]{2}-[0-9]{7}\s+", "", s)
+    s = re.sub(r"^[0-9]{8}\s+", "", s)
+    s = re.sub(r"^[0-9]{9}\s+", "", s)
+    s = re.sub(r"^[0-9]+\s+", "", s)
     for pat in _BOILER_PATTERNS:
         s = re.sub(rf"\b{pat}\b", " ", s, flags=re.IGNORECASE)
-
-    # Collapse multiple spaces and trim
     s = re.sub(r"\s+", " ", s).strip()
-
-    # Title-case; keep “WA”, “USA”, etc. if present (simple approach)
-    s = s.title()
-
-    # If nothing left, fallback to original base (title-cased)
-    if not s:
-        s = os.path.splitext(os.path.basename(path))[0].replace("_", " ").replace("-", " ").title()
-
-    return s
+    return s.title() or base.title()
 
 # ---------- Melt & normalize ----------
 def melt_and_normalize(df: pd.DataFrame, hospital_name: str) -> pd.DataFrame:
-    # 0) normalize and dedupe headers
     df = df.copy()
     df.columns = [normalize_header(c) for c in df.columns]
     if len(set(df.columns)) != len(df.columns):
@@ -176,7 +133,6 @@ def melt_and_normalize(df: pd.DataFrame, hospital_name: str) -> pd.DataFrame:
         print("   ↳ detected duplicate headers; made them unique.")
     cols = list(df.columns)
 
-    # helper: first existing column whose base-name matches any candidate
     def pick_first(*candidates):
         cand_set = set(candidates)
         for name in cols:
@@ -184,36 +140,55 @@ def melt_and_normalize(df: pd.DataFrame, hospital_name: str) -> pd.DataFrame:
                 return name
         return None
 
-    # choose id cols without renaming originals
+    # Pick ID columns (keep plan_name separate from payer_name)
     col_code        = pick_first("code|1", "code")
     col_code_type   = pick_first("code|1|type", "code_type")
-    col_payer_name  = pick_first("payer_name", "plan_name")
+    col_code2       = pick_first("code|2")
+    col_code2_type  = pick_first("code|2|type")
+
+    col_payer_name  = pick_first("payer_name")
+    col_plan_name   = pick_first("plan_name")  # NEW: keep explicitly
     col_bclass      = pick_first("billing_class")
     col_setting     = pick_first("setting")
     col_currency    = pick_first("currency")
     col_eff_date    = pick_first("effective_date", "start_date")
     col_exp_date    = pick_first("expires_on", "end_date")
     col_desc_hint   = pick_first("description")
+    col_modifiers   = pick_first("modifiers")
+    col_drug_uom    = pick_first("drug_unit_of_measurement")
+    col_drug_type   = pick_first("drug_type_of_measurement")
+    col_neg_algo    = pick_first("standard_charge|negotiated_algorithm", "negotiated_algorithm")
+    col_method      = pick_first("standard_charge|methodology", "methodology")
+    col_est_amt     = pick_first("estimated_amount")
+    col_add_notes   = pick_first("additional_generic_notes")
+    col_metadata    = pick_first("metadata")  # if your cleaner added it
 
-    # build working frame
+    # Build working frame with all we want to carry through the melt
     use_cols = []
-    for c in [col_code, col_code_type, col_payer_name, col_bclass, col_setting,
-              col_currency, col_eff_date, col_exp_date, col_desc_hint]:
+    for c in [
+        col_code, col_code_type, col_code2, col_code2_type,
+        col_payer_name, col_plan_name, col_bclass, col_setting,
+        col_currency, col_eff_date, col_exp_date, col_desc_hint,
+        col_modifiers, col_drug_uom, col_drug_type, col_neg_algo,
+        col_method, col_est_amt, col_add_notes, col_metadata
+    ]:
         if c and c not in use_cols:
             use_cols.append(c)
 
-    # detect charge columns by pattern
     charge_cols = [c for c in cols if is_charge_col(c)]
     if not charge_cols:
-        print("  No standard_charge-like columns detected; skipping this file.")
+        print("No standard_charge-like columns detected; skipping this file.")
         return pd.DataFrame(columns=[
-            "hospital_name","code","code_type","payer_name","billing_class",
-            "price_type","price_amount","currency","effective_date","expires_on","description","notes"
+            "hospital_name","code","code_type","payer_name","plan_name","billing_class",
+            "price_type","price_amount","currency","effective_date","expires_on",
+            "description","modifiers","drug_unit_of_measurement","drug_type_of_measurement",
+            "negotiated_algorithm","estimated_amount","methodology","additional_generic_notes",
+            "metadata","code_2","code_2_type","notes"
         ])
 
     wdf = df[use_cols + charge_cols].copy()
 
-    # melt (all names are unique strings)
+    # Melt
     id_vars = use_cols[:]
     value_vars = charge_cols[:]
     print(f"   → melting with {len(id_vars)} id cols, {len(value_vars)} charge cols")
@@ -225,11 +200,11 @@ def melt_and_normalize(df: pd.DataFrame, hospital_name: str) -> pd.DataFrame:
         value_name="price_amount_raw"
     )
 
-    # map charge column -> price_type
+    # Map price type
     long_df["price_type"] = long_df["charge_col"].map(col_to_price_type_from_name)
     long_df.drop(columns=["charge_col"], inplace=True)
 
-    # coalesce code & code_type across slots 1..4
+    # Coalesce code/code_type across slots, keep slot 2 raw as separate columns
     present = lambda L: [c for c in L if c in long_df.columns]
     code_cols = present(["code|1", "code|2", "code|3", "code|4", "code"])
     type_cols = present(["code|1|type", "code|2|type", "code|3|type", "code|4|type", "code_type"])
@@ -245,8 +220,8 @@ def melt_and_normalize(df: pd.DataFrame, hospital_name: str) -> pd.DataFrame:
                 return str(v).strip()
         return ""
 
-    long_df["code_any"]      = long_df.apply(lambda r: first_nonempty(r, code_cols), axis=1)
-    long_df["code_type_any"] = long_df.apply(lambda r: first_nonempty(r, type_cols), axis=1)
+    long_df["code"]      = long_df.apply(lambda r: first_nonempty(r, code_cols), axis=1)
+    long_df["code_type"] = long_df.apply(lambda r: first_nonempty(r, type_cols), axis=1)
 
     def norm_type(t):
         t = (t or "").strip().upper()
@@ -255,30 +230,32 @@ def melt_and_normalize(df: pd.DataFrame, hospital_name: str) -> pd.DataFrame:
         if t in ("DRG", "MS-DRG", "MSDRG"):return "DRG"
         if t in ("ICD", "ICD10", "ICD-10"):return "ICD10"
         return t
+    long_df["code_type"] = long_df["code_type"].map(norm_type)
 
-    long_df["code_type_any"] = long_df["code_type_any"].map(norm_type)
-
-    # rename chosen id columns to canonical names
+    # Rename carried columns to canonical names for output
     rename_id = {}
     if col_payer_name: rename_id[col_payer_name] = "payer_name"
+    if col_plan_name:  rename_id[col_plan_name]  = "plan_name"
     if col_bclass:     rename_id[col_bclass]     = "billing_class"
     if col_setting:    rename_id[col_setting]    = "setting"
     if col_currency:   rename_id[col_currency]   = "currency"
     if col_eff_date:   rename_id[col_eff_date]   = "effective_date"
     if col_exp_date:   rename_id[col_exp_date]   = "expires_on"
     if col_desc_hint:  rename_id[col_desc_hint]  = "description"
+    if col_modifiers:  rename_id[col_modifiers]  = "modifiers"
+    if col_drug_uom:   rename_id[col_drug_uom]   = "drug_unit_of_measurement"
+    if col_drug_type:  rename_id[col_drug_type]  = "drug_type_of_measurement"
+    if col_neg_algo:   rename_id[col_neg_algo]   = "negotiated_algorithm"
+    if col_method:     rename_id[col_method]     = "methodology"
+    if col_est_amt:    rename_id[col_est_amt]    = "estimated_amount"
+    if col_add_notes:  rename_id[col_add_notes]  = "additional_generic_notes"
+    if col_metadata:   rename_id[col_metadata]   = "metadata"
+    if col_code2:      rename_id[col_code2]      = "code_2"
+    if col_code2_type: rename_id[col_code2_type] = "code_2_type"
+
     long_df.rename(columns=rename_id, inplace=True)
 
-    # use coalesced code/type
-    long_df["code"]      = long_df["code_any"]
-    long_df["code_type"] = long_df["code_type_any"]
-    long_df.drop(columns=["code_any","code_type_any"], inplace=True)
-
-    # description fallback
-    if "description" not in long_df.columns:
-        long_df["description"] = ""
-
-    # clean numeric price
+    # Clean numeric price
     def to_numeric(val, ptype):
         v = (val or "").strip()
         if v == "": return ""
@@ -291,7 +268,7 @@ def melt_and_normalize(df: pd.DataFrame, hospital_name: str) -> pd.DataFrame:
     long_df["price_amount"] = [to_numeric(v, t) for v, t in zip(long_df["price_amount_raw"], long_df["price_type"])]
     long_df.drop(columns=["price_amount_raw"], inplace=True, errors="ignore")
 
-    # notes JSON
+    # Optional notes JSON (keep using it; explicit columns are also preserved)
     note_keys = ["description", "setting", "modifiers"]
     def pack_notes(row):
         d = {k: row.get(k, "") for k in note_keys}
@@ -299,23 +276,33 @@ def melt_and_normalize(df: pd.DataFrame, hospital_name: str) -> pd.DataFrame:
         return json.dumps(d, ensure_ascii=False) if d else ""
     notes_series = long_df.apply(pack_notes, axis=1)
 
-    # assemble canonical frame
     def col_or_blank_local(df_, col):
         return df_[col].fillna("") if col in df_.columns else pd.Series([""] * len(df_), index=df_.index)
 
     out = pd.DataFrame({
-        "hospital_name":  hospital_name,
-        "code":           col_or_blank_local(long_df, "code"),
-        "code_type":      col_or_blank_local(long_df, "code_type"),
-        "payer_name":     col_or_blank_local(long_df, "payer_name"),
-        "billing_class":  col_or_blank_local(long_df, "billing_class"),
-        "price_type":     col_or_blank_local(long_df, "price_type"),
-        "price_amount":   col_or_blank_local(long_df, "price_amount"),
-        "currency":       col_or_blank_local(long_df, "currency"),
-        "effective_date": col_or_blank_local(long_df, "effective_date"),
-        "expires_on":     col_or_blank_local(long_df, "expires_on"),
-        "description":    col_or_blank_local(long_df, "description"),
-        "notes":          notes_series.fillna("")
+        "hospital_name":             hospital_name,
+        "code":                      col_or_blank_local(long_df, "code"),
+        "code_type":                 col_or_blank_local(long_df, "code_type"),
+        "code_2":                    col_or_blank_local(long_df, "code_2"),
+        "code_2_type":               col_or_blank_local(long_df, "code_2_type"),
+        "payer_name":                col_or_blank_local(long_df, "payer_name"),
+        "plan_name":                 col_or_blank_local(long_df, "plan_name"),
+        "billing_class":             col_or_blank_local(long_df, "billing_class"),
+        "price_type":                col_or_blank_local(long_df, "price_type"),
+        "price_amount":              col_or_blank_local(long_df, "price_amount"),
+        "currency":                  col_or_blank_local(long_df, "currency"),
+        "effective_date":            col_or_blank_local(long_df, "effective_date"),
+        "expires_on":                col_or_blank_local(long_df, "expires_on"),
+        "description":               col_or_blank_local(long_df, "description"),
+        "modifiers":                 col_or_blank_local(long_df, "modifiers"),
+        "drug_unit_of_measurement":  col_or_blank_local(long_df, "drug_unit_of_measurement"),
+        "drug_type_of_measurement":  col_or_blank_local(long_df, "drug_type_of_measurement"),
+        "negotiated_algorithm":      col_or_blank_local(long_df, "negotiated_algorithm"),
+        "estimated_amount":          col_or_blank_local(long_df, "estimated_amount"),
+        "methodology":               col_or_blank_local(long_df, "methodology"),
+        "additional_generic_notes":  col_or_blank_local(long_df, "additional_generic_notes"),
+        "metadata":                  col_or_blank_local(long_df, "metadata"),
+        "notes":                     notes_series.fillna(""),
     })
 
     # keep usable rows
@@ -330,9 +317,11 @@ def melt_and_normalize(df: pd.DataFrame, hospital_name: str) -> pd.DataFrame:
 # ---------- COPY into single table ----------
 def copy_to_single_table(df, source_file):
     cols = [
-        "hospital_name","code","code_type","price_type","price_amount",
-        "payer_name","billing_class","currency","effective_date","expires_on",
-        "description","notes"
+        "hospital_name","code","code_type","code_2","code_2_type",
+        "price_type","price_amount","payer_name","plan_name","billing_class",
+        "currency","effective_date","expires_on","description","modifiers",
+        "drug_unit_of_measurement","drug_type_of_measurement","negotiated_algorithm",
+        "estimated_amount","methodology","additional_generic_notes","metadata","notes"
     ]
     for c in cols:
         if c not in df.columns:
@@ -348,18 +337,19 @@ def copy_to_single_table(df, source_file):
     conn = ENGINE.raw_connection()
     try:
         cur = conn.cursor()
-        # Use NULL '' so empty strings become NULL (safer for DATE/NUMERIC/JSONB)
-        cur.copy_expert("""
+        # idempotent per-file: remove prior rows for this file
+        cur.execute("DELETE FROM public.hospital_prices WHERE source_file = %s;", (source_file,))
+        # load fresh
+        cur.copy_expert(f"""
             COPY public.hospital_prices
-            (hospital_name,code,code_type,price_type,price_amount,
-             payer_name,billing_class,currency,effective_date,expires_on,
-             description,notes,source_file)
+            ({",".join(cols)},source_file)
             FROM STDIN WITH (FORMAT CSV, NULL '')
         """, buf)
         conn.commit()
         cur.close()
     finally:
         conn.close()
+
 
 # ---------- MAIN ----------
 def main():
