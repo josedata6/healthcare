@@ -30,8 +30,8 @@ def _try_read(path: str, encoding: str, sep, engine: str):
         open_any(path),
         dtype=str,
         encoding=encoding,
-        sep=sep,                 # None => auto (engine='python')
-        engine=engine,           # 'python' parser is more forgiving
+        sep=sep,                 
+        engine=engine,           
         quotechar='"',
         on_bad_lines="skip",
         skipinitialspace=True,
@@ -333,11 +333,11 @@ def main():
         df = read_csv_any(path)
         tidy = melt_and_normalize(df, hospital_name=hosp)
         if tidy.empty:
-            print("   ⚠️  No price rows produced; skipping.")
+            print("   No price rows produced; skipping.")
             continue
         copy_to_single_table(tidy, os.path.basename(path))
 
-    print("✅ All files loaded into public.hospital_prices.")
+    print("All files loaded into public.hospital_prices.")
 
 if __name__ == "__main__":
     main()
