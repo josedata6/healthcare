@@ -93,7 +93,7 @@
         "kind": 5,
         "importPath": "clean-csv-hospitalData",
         "description": "clean-csv-hospitalData",
-        "peekOfCode": "OUT_DIR = \"/Users/jdd48774/Downloads/hospitaldata_clean\" # cleaned folder\nFORCE_GZIP = True  # True -> write .csv.gz\n# Pricing/structure headers we expect in a REAL header row\nEXPECTED_TOKENS = {\n    \"description\", \"code|\", \"code|1\", \"code|1|type\", \"code|2\", \"code|2|type\",\n    \"standard_charge\", \"standard_charge|gross\", \"standard_charge|discounted_cash\",\n    \"standard_charge|negotiated_dollar\", \"standard_charge|negotiated_percentage\",\n    \"standard_charge|min\", \"standard_charge|max\",\n    \"payer_name\", \"plan_name\", \"billing_class\", \"setting\", \"currency\",\n}",
+        "peekOfCode": "OUT_DIR = \"/Users/jdd48774/Downloads/out-tall\" # cleaned folder\nFORCE_GZIP = True  # True -> write .csv.gz\n# Pricing/structure headers we expect in a REAL header row\nEXPECTED_TOKENS = {\n    \"description\", \"code|\", \"code|1\", \"code|1|type\", \"code|2\", \"code|2|type\",\n    \"standard_charge\", \"standard_charge|gross\", \"standard_charge|discounted_cash\",\n    \"standard_charge|negotiated_dollar\", \"standard_charge|negotiated_percentage\",\n    \"standard_charge|min\", \"standard_charge|max\",\n    \"payer_name\", \"plan_name\", \"billing_class\", \"setting\", \"currency\",\n}",
         "detail": "clean-csv-hospitalData",
         "documentation": {}
     },
@@ -210,7 +210,7 @@
         "kind": 5,
         "importPath": "load-csv-database",
         "description": "load-csv-database",
-        "peekOfCode": "DATA_DIR = \"/Users/jdd48774/Documents/_BANA3/healthcare/hospitaldata5\" ## path for files to load\nENGINE   = create_engine(DB_URL, future=True)\n# Map charge suffix -> canonical price_type\nPRICE_TYPE_MAP = {\n    \"gross\": \"chargemaster\",\n    \"gross_charge\": \"chargemaster\",\n    \"gross_charges\": \"chargemaster\",\n    \"discounted_cash\": \"cash\",\n    \"negotiated_dollar\": \"negotiated\",\n    \"negotiated_percentage\": \"percentage\",",
+        "peekOfCode": "DATA_DIR = \"/Users/jdd48774/Downloads/out-tall\" ## path for files to load\nENGINE   = create_engine(DB_URL, future=True)\n# Map charge suffix -> canonical price_type\nPRICE_TYPE_MAP = {\n    \"gross\": \"chargemaster\",\n    \"gross_charge\": \"chargemaster\",\n    \"gross_charges\": \"chargemaster\",\n    \"discounted_cash\": \"cash\",\n    \"negotiated_dollar\": \"negotiated\",\n    \"negotiated_percentage\": \"percentage\",",
         "detail": "load-csv-database",
         "documentation": {}
     },
@@ -264,7 +264,7 @@
         "kind": 2,
         "importPath": "wide_to_tall",
         "description": "wide_to_tall",
-        "peekOfCode": "def base_name(name: str) -> str:\n    return name.split(\"__\", 1)[0]\n# -------- hospital name from filename --------\n_BOILER = [\n    r\"standard[_-]?charges?\", r\"machine[_- ]?readable\",\n    r\"(?:price|prices?)\", r\"chargemaster\", r\"cdm\",\n    r\"inpatient\", r\"outpatient\", r\"shoppable\"\n]\ndef guess_hospital_name_from_filename(path: str) -> str:\n    base = os.path.basename(path)",
+        "peekOfCode": "def base_name(name: str) -> str:\n    return name.split(\"__\", 1)[0]\n# -------- hospital name from filename --------\nSEP = r\"[_\\- ]\"   # underscore, hyphen, space (hyphen escaped)\n_BOILER = [\n    rf\"standard{SEP}?charges?\", rf\"machine{SEP}?readable\",\n    r\"(?:price|prices?)\", r\"chargemaster\", r\"cdm\",\n    r\"inpatient\", r\"outpatient\", r\"shoppable\"\n]\ndef guess_hospital_name_from_filename(path: str) -> str:",
         "detail": "wide_to_tall",
         "documentation": {}
     },
@@ -359,11 +359,20 @@
         "documentation": {}
     },
     {
+        "label": "SEP",
+        "kind": 5,
+        "importPath": "wide_to_tall",
+        "description": "wide_to_tall",
+        "peekOfCode": "SEP = r\"[_\\- ]\"   # underscore, hyphen, space (hyphen escaped)\n_BOILER = [\n    rf\"standard{SEP}?charges?\", rf\"machine{SEP}?readable\",\n    r\"(?:price|prices?)\", r\"chargemaster\", r\"cdm\",\n    r\"inpatient\", r\"outpatient\", r\"shoppable\"\n]\ndef guess_hospital_name_from_filename(path: str) -> str:\n    base = os.path.basename(path)\n    base = re.sub(r\"\\.csv(\\.gz)?$\", \"\", base, flags=re.IGNORECASE)\n    s = base.replace(\"_\", \" \").replace(\"-\", \" \")",
+        "detail": "wide_to_tall",
+        "documentation": {}
+    },
+    {
         "label": "_BOILER",
         "kind": 5,
         "importPath": "wide_to_tall",
         "description": "wide_to_tall",
-        "peekOfCode": "_BOILER = [\n    r\"standard[_-]?charges?\", r\"machine[_- ]?readable\",\n    r\"(?:price|prices?)\", r\"chargemaster\", r\"cdm\",\n    r\"inpatient\", r\"outpatient\", r\"shoppable\"\n]\ndef guess_hospital_name_from_filename(path: str) -> str:\n    base = os.path.basename(path)\n    base = re.sub(r\"\\.csv(\\.gz)?$\", \"\", base, flags=re.IGNORECASE)\n    s = base.replace(\"_\", \" \").replace(\"-\", \" \")\n    s = re.sub(r\"^[0-9]{2}-[0-9]{7}\\s+\", \"\", s)  # EIN like 91-0750229",
+        "peekOfCode": "_BOILER = [\n    rf\"standard{SEP}?charges?\", rf\"machine{SEP}?readable\",\n    r\"(?:price|prices?)\", r\"chargemaster\", r\"cdm\",\n    r\"inpatient\", r\"outpatient\", r\"shoppable\"\n]\ndef guess_hospital_name_from_filename(path: str) -> str:\n    base = os.path.basename(path)\n    base = re.sub(r\"\\.csv(\\.gz)?$\", \"\", base, flags=re.IGNORECASE)\n    s = base.replace(\"_\", \" \").replace(\"-\", \" \")\n    s = re.sub(r\"^[0-9]{2}-[0-9]{7}\\s+\", \"\", s)  # EIN like 91-0750229",
         "detail": "wide_to_tall",
         "documentation": {}
     },

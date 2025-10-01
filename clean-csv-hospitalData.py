@@ -3,8 +3,8 @@ import os, glob, gzip, io, re
 import pandas as pd
 
 # ================== CONFIG ==================
-IN_DIR  = "/Users/jdd48774/Downloads/raw_data5kbs"      # raw folder
-OUT_DIR = "/Users/jdd48774/Downloads/hospitaldata_clean" # cleaned folder
+IN_DIR  = "/Users/jdd48774/Downloads/wide-to-tall"      # raw folder
+OUT_DIR = "/Users/jdd48774/Downloads/out-tall" # cleaned folder
 FORCE_GZIP = True  # True -> write .csv.gz
 
 # Pricing/structure headers we expect in a REAL header row

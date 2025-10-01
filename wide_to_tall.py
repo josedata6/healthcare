@@ -62,11 +62,13 @@ def base_name(name: str) -> str:
     return name.split("__", 1)[0]
 
 # -------- hospital name from filename --------
+SEP = r"[_\- ]"   # underscore, hyphen, space (hyphen escaped)
 _BOILER = [
-    r"standard[_-]?charges?", r"machine[_- ]?readable",
+    rf"standard{SEP}?charges?", rf"machine{SEP}?readable",
     r"(?:price|prices?)", r"chargemaster", r"cdm",
     r"inpatient", r"outpatient", r"shoppable"
 ]
+
 def guess_hospital_name_from_filename(path: str) -> str:
     base = os.path.basename(path)
     base = re.sub(r"\.csv(\.gz)?$", "", base, flags=re.IGNORECASE)
@@ -368,7 +370,7 @@ def main():
         out_name = os.path.basename(re.sub(r"\.csv(\.gz)?$", "", path, flags=re.IGNORECASE)) + ".tall.csv"
         out_path = os.path.join(OUT_DIR, out_name)
         if not OVERWRITE and os.path.exists(out_path):
-            print(f"⚠️  Skipping {out_name} (exists)")
+            print(f"  Skipping {out_name} (exists)")
             continue
 
         print(f"\n→ Processing: {os.path.basename(path)}  |  inferred hospital: {hosp}")
@@ -376,12 +378,12 @@ def main():
         tall = to_tall(df, hosp)
 
         if tall.empty:
-            print("   ⚠️  Produced zero tall rows; not writing.")
+            print("  Produced zero tall rows; not writing.")
             continue
 
         # Write tall CSV
         tall.to_csv(out_path, index=False)
-        print(f"   ✅ Wrote {len(tall):,} tall rows → {out_path}")
+        print(f" Wrote {len(tall):,} tall rows → {out_path}")
 
 if __name__ == "__main__":
     main()
