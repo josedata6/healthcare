@@ -131,7 +131,7 @@ def main():
         except Exception as e:
             print(f"✗ {os.path.basename(src)}: {e}")
 
-    print("✅ Cleaning complete. Point your loader at OUT_DIR.")
+    print(" Cleaning complete. Point your loader at OUT_DIR.")
 
 if __name__ == "__main__":
     main()
