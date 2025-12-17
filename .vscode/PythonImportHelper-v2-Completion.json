@@ -1,5 +1,29 @@
 [
     {
+        "label": "DiscreteBayesianNetwork",
+        "importPath": "pgmpy.models",
+        "description": "pgmpy.models",
+        "isExtraImport": true,
+        "detail": "pgmpy.models",
+        "documentation": {}
+    },
+    {
+        "label": "TabularCPD",
+        "importPath": "pgmpy.factors.discrete",
+        "description": "pgmpy.factors.discrete",
+        "isExtraImport": true,
+        "detail": "pgmpy.factors.discrete",
+        "documentation": {}
+    },
+    {
+        "label": "VariableElimination",
+        "importPath": "pgmpy.inference",
+        "description": "pgmpy.inference",
+        "isExtraImport": true,
+        "detail": "pgmpy.inference",
+        "documentation": {}
+    },
+    {
         "label": "os,",
         "kind": 6,
         "isExtraImport": true,
@@ -15,15 +39,6 @@
         "importPath": "pandas",
         "description": "pandas",
         "detail": "pandas",
-        "documentation": {}
-    },
-    {
-        "label": "argparse",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "argparse",
-        "description": "argparse",
-        "detail": "argparse",
         "documentation": {}
     },
     {
@@ -45,6 +60,49 @@
         "documentation": {}
     },
     {
+        "label": "io",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "io",
+        "description": "io",
+        "detail": "io",
+        "documentation": {}
+    },
+    {
+        "label": "StringIO",
+        "importPath": "io",
+        "description": "io",
+        "isExtraImport": true,
+        "detail": "io",
+        "documentation": {}
+    },
+    {
+        "label": "StringIO",
+        "importPath": "io",
+        "description": "io",
+        "isExtraImport": true,
+        "detail": "io",
+        "documentation": {}
+    },
+    {
+        "label": "csv",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "csv",
+        "description": "csv",
+        "detail": "csv",
+        "documentation": {}
+    },
+    {
+        "label": "argparse",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "argparse",
+        "description": "argparse",
+        "detail": "argparse",
+        "documentation": {}
+    },
+    {
         "label": "sys",
         "kind": 6,
         "isExtraImport": true,
@@ -54,11 +112,11 @@
         "documentation": {}
     },
     {
-        "label": "StringIO",
-        "importPath": "io",
-        "description": "io",
+        "label": "glob",
+        "importPath": "glob",
+        "description": "glob",
         "isExtraImport": true,
-        "detail": "io",
+        "detail": "glob",
         "documentation": {}
     },
     {
@@ -84,6 +142,84 @@
         "description": "sqlalchemy",
         "isExtraImport": true,
         "detail": "sqlalchemy",
+        "documentation": {}
+    },
+    {
+        "label": "WordNetLemmatizer",
+        "importPath": "nltk.stem",
+        "description": "nltk.stem",
+        "isExtraImport": true,
+        "detail": "nltk.stem",
+        "documentation": {}
+    },
+    {
+        "label": "WordNetLemmatizer",
+        "importPath": "nltk.stem",
+        "description": "nltk.stem",
+        "isExtraImport": true,
+        "detail": "nltk.stem",
+        "documentation": {}
+    },
+    {
+        "label": "word_tokenize",
+        "importPath": "nltk.tokenize",
+        "description": "nltk.tokenize",
+        "isExtraImport": true,
+        "detail": "nltk.tokenize",
+        "documentation": {}
+    },
+    {
+        "label": "model",
+        "kind": 5,
+        "importPath": "bayesianNetwork-example",
+        "description": "bayesianNetwork-example",
+        "peekOfCode": "model = DiscreteBayesianNetwork([('Rain', 'Sprinkler'), ('Rain', 'WetGrass'), ('Sprinkler', 'WetGrass')])\n# Define probabilities\ncpd_rain = TabularCPD('Rain', 2, [[0.7], [0.3]])\ncpd_sprinkler = TabularCPD('Sprinkler', 2,\n                           [[0.6, 0.99],\n                            [0.4, 0.01]],\n                           evidence=['Rain'],\n                           evidence_card=[2])\ncpd_wetgrass = TabularCPD('WetGrass', 2,\n                          [[1, 0.1, 0.1, 0.01],",
+        "detail": "bayesianNetwork-example",
+        "documentation": {}
+    },
+    {
+        "label": "cpd_rain",
+        "kind": 5,
+        "importPath": "bayesianNetwork-example",
+        "description": "bayesianNetwork-example",
+        "peekOfCode": "cpd_rain = TabularCPD('Rain', 2, [[0.7], [0.3]])\ncpd_sprinkler = TabularCPD('Sprinkler', 2,\n                           [[0.6, 0.99],\n                            [0.4, 0.01]],\n                           evidence=['Rain'],\n                           evidence_card=[2])\ncpd_wetgrass = TabularCPD('WetGrass', 2,\n                          [[1, 0.1, 0.1, 0.01],\n                           [0, 0.9, 0.9, 0.99]],\n                          evidence=['Rain', 'Sprinkler'],",
+        "detail": "bayesianNetwork-example",
+        "documentation": {}
+    },
+    {
+        "label": "cpd_sprinkler",
+        "kind": 5,
+        "importPath": "bayesianNetwork-example",
+        "description": "bayesianNetwork-example",
+        "peekOfCode": "cpd_sprinkler = TabularCPD('Sprinkler', 2,\n                           [[0.6, 0.99],\n                            [0.4, 0.01]],\n                           evidence=['Rain'],\n                           evidence_card=[2])\ncpd_wetgrass = TabularCPD('WetGrass', 2,\n                          [[1, 0.1, 0.1, 0.01],\n                           [0, 0.9, 0.9, 0.99]],\n                          evidence=['Rain', 'Sprinkler'],\n                          evidence_card=[2, 2])",
+        "detail": "bayesianNetwork-example",
+        "documentation": {}
+    },
+    {
+        "label": "cpd_wetgrass",
+        "kind": 5,
+        "importPath": "bayesianNetwork-example",
+        "description": "bayesianNetwork-example",
+        "peekOfCode": "cpd_wetgrass = TabularCPD('WetGrass', 2,\n                          [[1, 0.1, 0.1, 0.01],\n                           [0, 0.9, 0.9, 0.99]],\n                          evidence=['Rain', 'Sprinkler'],\n                          evidence_card=[2, 2])\nmodel.add_cpds(cpd_rain, cpd_sprinkler, cpd_wetgrass)\ninfer = VariableElimination(model)\n# Query\nprob = infer.query(variables=['Rain'], evidence={'WetGrass': 1})\nprint(prob)",
+        "detail": "bayesianNetwork-example",
+        "documentation": {}
+    },
+    {
+        "label": "infer",
+        "kind": 5,
+        "importPath": "bayesianNetwork-example",
+        "description": "bayesianNetwork-example",
+        "peekOfCode": "infer = VariableElimination(model)\n# Query\nprob = infer.query(variables=['Rain'], evidence={'WetGrass': 1})\nprint(prob)",
+        "detail": "bayesianNetwork-example",
+        "documentation": {}
+    },
+    {
+        "label": "prob",
+        "kind": 5,
+        "importPath": "bayesianNetwork-example",
+        "description": "bayesianNetwork-example",
+        "peekOfCode": "prob = infer.query(variables=['Rain'], evidence={'WetGrass': 1})\nprint(prob)",
+        "detail": "bayesianNetwork-example",
         "documentation": {}
     },
     {
@@ -186,6 +322,465 @@
         "documentation": {}
     },
     {
+        "label": "list_files",
+        "kind": 2,
+        "importPath": "count-tall-wide-csv",
+        "description": "count-tall-wide-csv",
+        "peekOfCode": "def list_files(root, recursive=True):\n    exts = (\".csv\", \".tsv\", \".txt\", \".xlsx\", \".xls\")\n    if not recursive:\n        for fname in sorted(os.listdir(root)):\n            full = os.path.join(root, fname)\n            if os.path.isfile(full) and fname.lower().endswith(exts):\n                yield full\n    else:\n        for dirpath, _, files in os.walk(root):\n            for fname in sorted(files):",
+        "detail": "count-tall-wide-csv",
+        "documentation": {}
+    },
+    {
+        "label": "sniff_delimiter",
+        "kind": 2,
+        "importPath": "count-tall-wide-csv",
+        "description": "count-tall-wide-csv",
+        "peekOfCode": "def sniff_delimiter(sample_bytes):\n    try:\n        sample = sample_bytes.decode(\"utf-8\", errors=\"ignore\")\n        dialect = csv.Sniffer().sniff(sample, delimiters=\",\\t;|^\")\n        return dialect.delimiter\n    except Exception:\n        return None\ndef read_csv_safely(fullpath):\n    last_err = None\n    # read small sample for delimiter sniffing",
+        "detail": "count-tall-wide-csv",
+        "documentation": {}
+    },
+    {
+        "label": "read_csv_safely",
+        "kind": 2,
+        "importPath": "count-tall-wide-csv",
+        "description": "count-tall-wide-csv",
+        "peekOfCode": "def read_csv_safely(fullpath):\n    last_err = None\n    # read small sample for delimiter sniffing\n    try:\n        with open(fullpath, \"rb\") as fh:\n            sample_bytes = fh.read(8192)\n        sniffed = sniff_delimiter(sample_bytes)  # may be None\n        delims = [sniffed] + [d for d in DELIMS_TO_TRY if d != sniffed]\n    except Exception:\n        delims = DELIMS_TO_TRY",
+        "detail": "count-tall-wide-csv",
+        "documentation": {}
+    },
+    {
+        "label": "read_excel_safely",
+        "kind": 2,
+        "importPath": "count-tall-wide-csv",
+        "description": "count-tall-wide-csv",
+        "peekOfCode": "def read_excel_safely(fullpath):\n    # returns list of (sheet_name, df) — possibly multiple sheets\n    try:\n        xls = pd.ExcelFile(fullpath)\n        sheets = []\n        for sheet in xls.sheet_names if TRY_SHEETS else [xls.sheet_names[0]]:\n            try:\n                df = pd.read_excel(xls, sheet_name=sheet, nrows=SAMPLE_ROWS)\n                df.columns = [str(c) for c in df.columns]\n                sheets.append((sheet, df))",
+        "detail": "count-tall-wide-csv",
+        "documentation": {}
+    },
+    {
+        "label": "read_table",
+        "kind": 2,
+        "importPath": "count-tall-wide-csv",
+        "description": "count-tall-wide-csv",
+        "peekOfCode": "def read_table(fullpath):\n    lower = fullpath.lower()\n    if lower.endswith(\".csv\") or lower.endswith(\".tsv\") or (lower.endswith(\".txt\") and TREAT_TXT_AS_CSV):\n        df = read_csv_safely(fullpath)\n        return [(\"CSV\", df)]\n    elif lower.endswith(\".xlsx\") or lower.endswith(\".xls\"):\n        return read_excel_safely(fullpath)\n    else:\n        return []\n# ---------- Classification helpers ----------",
+        "detail": "count-tall-wide-csv",
+        "documentation": {}
+    },
+    {
+        "label": "is_numeric_series",
+        "kind": 2,
+        "importPath": "count-tall-wide-csv",
+        "description": "count-tall-wide-csv",
+        "peekOfCode": "def is_numeric_series(s: pd.Series) -> bool:\n    return pd.api.types.is_numeric_dtype(s)\ndef is_categorical_series(s: pd.Series) -> bool:\n    return pd.api.types.is_object_dtype(s) or pd.api.types.is_categorical_dtype(s)\ndef detect_wide_by_col_patterns(cols):\n    \"\"\"\n    Find base names with time/period suffixes (years, quarters, months, day numbers).\n    \"\"\"\n    pattern = re.compile(\n        r\"^(?P<base>.+?)[_\\-]?(?P<suf>(\"",
+        "detail": "count-tall-wide-csv",
+        "documentation": {}
+    },
+    {
+        "label": "is_categorical_series",
+        "kind": 2,
+        "importPath": "count-tall-wide-csv",
+        "description": "count-tall-wide-csv",
+        "peekOfCode": "def is_categorical_series(s: pd.Series) -> bool:\n    return pd.api.types.is_object_dtype(s) or pd.api.types.is_categorical_dtype(s)\ndef detect_wide_by_col_patterns(cols):\n    \"\"\"\n    Find base names with time/period suffixes (years, quarters, months, day numbers).\n    \"\"\"\n    pattern = re.compile(\n        r\"^(?P<base>.+?)[_\\-]?(?P<suf>(\"\n        r\"\\d{2,4}\"               # e.g., 19, 2021\n        r\"|Q[1-4]\"               # Q1..Q4",
+        "detail": "count-tall-wide-csv",
+        "documentation": {}
+    },
+    {
+        "label": "detect_wide_by_col_patterns",
+        "kind": 2,
+        "importPath": "count-tall-wide-csv",
+        "description": "count-tall-wide-csv",
+        "peekOfCode": "def detect_wide_by_col_patterns(cols):\n    \"\"\"\n    Find base names with time/period suffixes (years, quarters, months, day numbers).\n    \"\"\"\n    pattern = re.compile(\n        r\"^(?P<base>.+?)[_\\-]?(?P<suf>(\"\n        r\"\\d{2,4}\"               # e.g., 19, 2021\n        r\"|Q[1-4]\"               # Q1..Q4\n        r\"|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\"\n        r\"|(?:0?[1-9]|[12][0-9]|3[01])\"  # day-of-month 1..31",
+        "detail": "count-tall-wide-csv",
+        "documentation": {}
+    },
+    {
+        "label": "detect_wide_by_structure",
+        "kind": 2,
+        "importPath": "count-tall-wide-csv",
+        "description": "count-tall-wide-csv",
+        "peekOfCode": "def detect_wide_by_structure(df: pd.DataFrame):\n    \"\"\"\n    Additional 'wide' cues:\n      - Many numeric columns (>=60%).\n      - Very few rows relative to columns (cols/rows >= 0.5 AND cols >= 20).\n    \"\"\"\n    nrows, ncols = df.shape\n    if ncols == 0:\n        return False, None\n    numeric_cols = sum(1 for c in df.columns if is_numeric_series(df[c]))",
+        "detail": "count-tall-wide-csv",
+        "documentation": {}
+    },
+    {
+        "label": "detect_tall_schema",
+        "kind": 2,
+        "importPath": "count-tall-wide-csv",
+        "description": "count-tall-wide-csv",
+        "peekOfCode": "def detect_tall_schema(df: pd.DataFrame):\n    \"\"\"\n    Tall cues:\n      - A single (or very few) numeric 'value' column(s).\n      - A 'variable/metric/measure' categorical column.\n      - Repeated IDs → average rows per ID >= 2.\n      - Many rows relative to columns.\n    \"\"\"\n    nrows, ncols = df.shape\n    if ncols == 0:",
+        "detail": "count-tall-wide-csv",
+        "documentation": {}
+    },
+    {
+        "label": "fallback_shape",
+        "kind": 2,
+        "importPath": "count-tall-wide-csv",
+        "description": "count-tall-wide-csv",
+        "peekOfCode": "def fallback_shape(df: pd.DataFrame):\n    nrows, ncols = df.shape\n    if nrows > ncols:\n        return \"tall\", f\"fallback: rows>cols ({nrows}>{ncols})\"\n    else:\n        return \"wide\", f\"fallback: cols>=rows ({ncols}>={nrows})\"\ndef classify(df: pd.DataFrame):\n    nrows, ncols = df.shape\n    # 0) Handle degenerate cases\n    if nrows == 0 or ncols == 0:",
+        "detail": "count-tall-wide-csv",
+        "documentation": {}
+    },
+    {
+        "label": "classify",
+        "kind": 2,
+        "importPath": "count-tall-wide-csv",
+        "description": "count-tall-wide-csv",
+        "peekOfCode": "def classify(df: pd.DataFrame):\n    nrows, ncols = df.shape\n    # 0) Handle degenerate cases\n    if nrows == 0 or ncols == 0:\n        return \"unknown\", \"empty/degenerate data frame\"\n    # 1) Pattern-based wide detection\n    is_wide_pattern, base_name, group_size, groups = detect_wide_by_col_patterns(df.columns)\n    if is_wide_pattern:\n        reason = f\"wide: {group_size} columns share base '{base_name}' with time/index suffixes\"\n        return \"wide\", reason",
+        "detail": "count-tall-wide-csv",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "count-tall-wide-csv",
+        "description": "count-tall-wide-csv",
+        "peekOfCode": "def main():\n    records = []\n    errors = []\n    for full in list_files(ROOT_PATH, RECURSIVE):\n        base = os.path.basename(full)\n        try:\n            tables = read_table(full)  # list of (label, df) — label is \"CSV\" or sheet name\n            if not tables:\n                errors.append((full, \"unrecognized or unreadable\"))\n                continue",
+        "detail": "count-tall-wide-csv",
+        "documentation": {}
+    },
+    {
+        "label": "ROOT_PATH",
+        "kind": 5,
+        "importPath": "count-tall-wide-csv",
+        "description": "count-tall-wide-csv",
+        "peekOfCode": "ROOT_PATH = \"/Volumes/Lexar/Raw_Data\"  # your USB root\nRECURSIVE = True                       # scan subfolders\nEXPORT_SUMMARY = True                  # save summary CSV\nSUMMARY_NAME = \"file_summary.csv\"      # saved into ROOT_PATH\nSAMPLE_ROWS = 5000                     # read up to this many rows for speed\nMIN_WIDE_SUFFIX_GROUP = 3              # >=3 columns sharing a base+suffix => wide signal\nTREAT_TXT_AS_CSV = True                # try to parse .txt as delimited text\nTRY_SHEETS = True                      # read all visible sheets in Excel; classify each\n# encodings & CSV read fallbacks\nENCODINGS = [\"utf-8-sig\", \"utf-8\", \"latin1\", \"mac_roman\"]",
+        "detail": "count-tall-wide-csv",
+        "documentation": {}
+    },
+    {
+        "label": "RECURSIVE",
+        "kind": 5,
+        "importPath": "count-tall-wide-csv",
+        "description": "count-tall-wide-csv",
+        "peekOfCode": "RECURSIVE = True                       # scan subfolders\nEXPORT_SUMMARY = True                  # save summary CSV\nSUMMARY_NAME = \"file_summary.csv\"      # saved into ROOT_PATH\nSAMPLE_ROWS = 5000                     # read up to this many rows for speed\nMIN_WIDE_SUFFIX_GROUP = 3              # >=3 columns sharing a base+suffix => wide signal\nTREAT_TXT_AS_CSV = True                # try to parse .txt as delimited text\nTRY_SHEETS = True                      # read all visible sheets in Excel; classify each\n# encodings & CSV read fallbacks\nENCODINGS = [\"utf-8-sig\", \"utf-8\", \"latin1\", \"mac_roman\"]\nCSV_KWARGS_TRIES = [",
+        "detail": "count-tall-wide-csv",
+        "documentation": {}
+    },
+    {
+        "label": "EXPORT_SUMMARY",
+        "kind": 5,
+        "importPath": "count-tall-wide-csv",
+        "description": "count-tall-wide-csv",
+        "peekOfCode": "EXPORT_SUMMARY = True                  # save summary CSV\nSUMMARY_NAME = \"file_summary.csv\"      # saved into ROOT_PATH\nSAMPLE_ROWS = 5000                     # read up to this many rows for speed\nMIN_WIDE_SUFFIX_GROUP = 3              # >=3 columns sharing a base+suffix => wide signal\nTREAT_TXT_AS_CSV = True                # try to parse .txt as delimited text\nTRY_SHEETS = True                      # read all visible sheets in Excel; classify each\n# encodings & CSV read fallbacks\nENCODINGS = [\"utf-8-sig\", \"utf-8\", \"latin1\", \"mac_roman\"]\nCSV_KWARGS_TRIES = [\n    # fast path",
+        "detail": "count-tall-wide-csv",
+        "documentation": {}
+    },
+    {
+        "label": "SUMMARY_NAME",
+        "kind": 5,
+        "importPath": "count-tall-wide-csv",
+        "description": "count-tall-wide-csv",
+        "peekOfCode": "SUMMARY_NAME = \"file_summary.csv\"      # saved into ROOT_PATH\nSAMPLE_ROWS = 5000                     # read up to this many rows for speed\nMIN_WIDE_SUFFIX_GROUP = 3              # >=3 columns sharing a base+suffix => wide signal\nTREAT_TXT_AS_CSV = True                # try to parse .txt as delimited text\nTRY_SHEETS = True                      # read all visible sheets in Excel; classify each\n# encodings & CSV read fallbacks\nENCODINGS = [\"utf-8-sig\", \"utf-8\", \"latin1\", \"mac_roman\"]\nCSV_KWARGS_TRIES = [\n    # fast path\n    dict(engine=\"c\", on_bad_lines=\"skip\", quoting=csv.QUOTE_MINIMAL),",
+        "detail": "count-tall-wide-csv",
+        "documentation": {}
+    },
+    {
+        "label": "SAMPLE_ROWS",
+        "kind": 5,
+        "importPath": "count-tall-wide-csv",
+        "description": "count-tall-wide-csv",
+        "peekOfCode": "SAMPLE_ROWS = 5000                     # read up to this many rows for speed\nMIN_WIDE_SUFFIX_GROUP = 3              # >=3 columns sharing a base+suffix => wide signal\nTREAT_TXT_AS_CSV = True                # try to parse .txt as delimited text\nTRY_SHEETS = True                      # read all visible sheets in Excel; classify each\n# encodings & CSV read fallbacks\nENCODINGS = [\"utf-8-sig\", \"utf-8\", \"latin1\", \"mac_roman\"]\nCSV_KWARGS_TRIES = [\n    # fast path\n    dict(engine=\"c\", on_bad_lines=\"skip\", quoting=csv.QUOTE_MINIMAL),\n    # flexible path",
+        "detail": "count-tall-wide-csv",
+        "documentation": {}
+    },
+    {
+        "label": "MIN_WIDE_SUFFIX_GROUP",
+        "kind": 5,
+        "importPath": "count-tall-wide-csv",
+        "description": "count-tall-wide-csv",
+        "peekOfCode": "MIN_WIDE_SUFFIX_GROUP = 3              # >=3 columns sharing a base+suffix => wide signal\nTREAT_TXT_AS_CSV = True                # try to parse .txt as delimited text\nTRY_SHEETS = True                      # read all visible sheets in Excel; classify each\n# encodings & CSV read fallbacks\nENCODINGS = [\"utf-8-sig\", \"utf-8\", \"latin1\", \"mac_roman\"]\nCSV_KWARGS_TRIES = [\n    # fast path\n    dict(engine=\"c\", on_bad_lines=\"skip\", quoting=csv.QUOTE_MINIMAL),\n    # flexible path\n    dict(engine=\"python\", on_bad_lines=\"skip\"),",
+        "detail": "count-tall-wide-csv",
+        "documentation": {}
+    },
+    {
+        "label": "TREAT_TXT_AS_CSV",
+        "kind": 5,
+        "importPath": "count-tall-wide-csv",
+        "description": "count-tall-wide-csv",
+        "peekOfCode": "TREAT_TXT_AS_CSV = True                # try to parse .txt as delimited text\nTRY_SHEETS = True                      # read all visible sheets in Excel; classify each\n# encodings & CSV read fallbacks\nENCODINGS = [\"utf-8-sig\", \"utf-8\", \"latin1\", \"mac_roman\"]\nCSV_KWARGS_TRIES = [\n    # fast path\n    dict(engine=\"c\", on_bad_lines=\"skip\", quoting=csv.QUOTE_MINIMAL),\n    # flexible path\n    dict(engine=\"python\", on_bad_lines=\"skip\"),\n]",
+        "detail": "count-tall-wide-csv",
+        "documentation": {}
+    },
+    {
+        "label": "TRY_SHEETS",
+        "kind": 5,
+        "importPath": "count-tall-wide-csv",
+        "description": "count-tall-wide-csv",
+        "peekOfCode": "TRY_SHEETS = True                      # read all visible sheets in Excel; classify each\n# encodings & CSV read fallbacks\nENCODINGS = [\"utf-8-sig\", \"utf-8\", \"latin1\", \"mac_roman\"]\nCSV_KWARGS_TRIES = [\n    # fast path\n    dict(engine=\"c\", on_bad_lines=\"skip\", quoting=csv.QUOTE_MINIMAL),\n    # flexible path\n    dict(engine=\"python\", on_bad_lines=\"skip\"),\n]\nDELIMS_TO_TRY = [None, \",\", \"\\t\", \";\", \"|\", \"^\"]  # None => sniff",
+        "detail": "count-tall-wide-csv",
+        "documentation": {}
+    },
+    {
+        "label": "ENCODINGS",
+        "kind": 5,
+        "importPath": "count-tall-wide-csv",
+        "description": "count-tall-wide-csv",
+        "peekOfCode": "ENCODINGS = [\"utf-8-sig\", \"utf-8\", \"latin1\", \"mac_roman\"]\nCSV_KWARGS_TRIES = [\n    # fast path\n    dict(engine=\"c\", on_bad_lines=\"skip\", quoting=csv.QUOTE_MINIMAL),\n    # flexible path\n    dict(engine=\"python\", on_bad_lines=\"skip\"),\n]\nDELIMS_TO_TRY = [None, \",\", \"\\t\", \";\", \"|\", \"^\"]  # None => sniff\nHEADER_CANDIDATES = [\"infer\", None, 0]  # try to detect header / headerless\n# ==================================================",
+        "detail": "count-tall-wide-csv",
+        "documentation": {}
+    },
+    {
+        "label": "CSV_KWARGS_TRIES",
+        "kind": 5,
+        "importPath": "count-tall-wide-csv",
+        "description": "count-tall-wide-csv",
+        "peekOfCode": "CSV_KWARGS_TRIES = [\n    # fast path\n    dict(engine=\"c\", on_bad_lines=\"skip\", quoting=csv.QUOTE_MINIMAL),\n    # flexible path\n    dict(engine=\"python\", on_bad_lines=\"skip\"),\n]\nDELIMS_TO_TRY = [None, \",\", \"\\t\", \";\", \"|\", \"^\"]  # None => sniff\nHEADER_CANDIDATES = [\"infer\", None, 0]  # try to detect header / headerless\n# ==================================================\ndef list_files(root, recursive=True):",
+        "detail": "count-tall-wide-csv",
+        "documentation": {}
+    },
+    {
+        "label": "DELIMS_TO_TRY",
+        "kind": 5,
+        "importPath": "count-tall-wide-csv",
+        "description": "count-tall-wide-csv",
+        "peekOfCode": "DELIMS_TO_TRY = [None, \",\", \"\\t\", \";\", \"|\", \"^\"]  # None => sniff\nHEADER_CANDIDATES = [\"infer\", None, 0]  # try to detect header / headerless\n# ==================================================\ndef list_files(root, recursive=True):\n    exts = (\".csv\", \".tsv\", \".txt\", \".xlsx\", \".xls\")\n    if not recursive:\n        for fname in sorted(os.listdir(root)):\n            full = os.path.join(root, fname)\n            if os.path.isfile(full) and fname.lower().endswith(exts):\n                yield full",
+        "detail": "count-tall-wide-csv",
+        "documentation": {}
+    },
+    {
+        "label": "HEADER_CANDIDATES",
+        "kind": 5,
+        "importPath": "count-tall-wide-csv",
+        "description": "count-tall-wide-csv",
+        "peekOfCode": "HEADER_CANDIDATES = [\"infer\", None, 0]  # try to detect header / headerless\n# ==================================================\ndef list_files(root, recursive=True):\n    exts = (\".csv\", \".tsv\", \".txt\", \".xlsx\", \".xls\")\n    if not recursive:\n        for fname in sorted(os.listdir(root)):\n            full = os.path.join(root, fname)\n            if os.path.isfile(full) and fname.lower().endswith(exts):\n                yield full\n    else:",
+        "detail": "count-tall-wide-csv",
+        "documentation": {}
+    },
+    {
+        "label": "norm_key",
+        "kind": 2,
+        "importPath": "hospital-loader_charge_long-loads-csvs",
+        "description": "hospital-loader_charge_long-loads-csvs",
+        "peekOfCode": "def norm_key(s: str) -> str:\n    return NORM_RE.sub(\"_\", str(s).strip().lower()).strip(\"_\")\n# synonyms for meta fields (keys are canonical output names)\nMETA_SYNONYMS = {\n    \"hospital_name\": {\"hospital_name\",\"facility_name\",\"provider_name\",\"hospital\",\"facility\"},\n    \"hospital_location\": {\"hospital_location\",\"location\",\"address_city_state_zip\",\"city_state_zip\",\"city_state_zip_code\"},\n    \"hospital_address\": {\"hospital_address\",\"address\",\"street\",\"street_address\",\"address_line_1\",\"address_1\"},\n    \"last_updated_on\": {\"last_updated_on\",\"last_updated\",\"updated_on\",\"update_date\",\"date\"},\n    \"version\": {\"version\",\"schema_version\",\"file_version\"},\n    \"license_number|ca\": {",
+        "detail": "hospital-loader_charge_long-loads-csvs",
+        "documentation": {}
+    },
+    {
+        "label": "read_csv_with_fallback",
+        "kind": 2,
+        "importPath": "hospital-loader_charge_long-loads-csvs",
+        "description": "hospital-loader_charge_long-loads-csvs",
+        "peekOfCode": "def read_csv_with_fallback(path, **kwargs):\n    last_err = None\n    for enc in ENCODING_TRY:\n        try:\n            return pd.read_csv(path, encoding=enc, **kwargs), enc\n        except UnicodeDecodeError as e:\n            last_err = e\n            continue\n    raise last_err\nSENTINEL_NULLS = {",
+        "detail": "hospital-loader_charge_long-loads-csvs",
+        "documentation": {}
+    },
+    {
+        "label": "clean_amount_like",
+        "kind": 2,
+        "importPath": "hospital-loader_charge_long-loads-csvs",
+        "description": "hospital-loader_charge_long-loads-csvs",
+        "peekOfCode": "def clean_amount_like(v):\n    if v is None:\n        return None\n    s = str(v).strip()\n    if s == \"\":\n        return None\n    sl = s.lower()\n    if sl in SENTINEL_NULLS:\n        return None\n    s2 = s.replace(\"$\",\"\").replace(\",\",\"\").strip()",
+        "detail": "hospital-loader_charge_long-loads-csvs",
+        "documentation": {}
+    },
+    {
+        "label": "normalize_str",
+        "kind": 2,
+        "importPath": "hospital-loader_charge_long-loads-csvs",
+        "description": "hospital-loader_charge_long-loads-csvs",
+        "peekOfCode": "def normalize_str(x):\n    if isinstance(x, str):\n        return x.replace(\"\\xa0\", \" \").strip()\n    return x\ndef sniff_delimiter(path, default=\",\", sample_lines=6):\n    with open(path, \"r\", encoding=\"utf-8\", errors=\"ignore\") as f:\n        head = [next(f, \"\") for _ in range(sample_lines)]\n    if not head:\n        return default\n    header_raw = head[min(2, len(head)-1)]",
+        "detail": "hospital-loader_charge_long-loads-csvs",
+        "documentation": {}
+    },
+    {
+        "label": "sniff_delimiter",
+        "kind": 2,
+        "importPath": "hospital-loader_charge_long-loads-csvs",
+        "description": "hospital-loader_charge_long-loads-csvs",
+        "peekOfCode": "def sniff_delimiter(path, default=\",\", sample_lines=6):\n    with open(path, \"r\", encoding=\"utf-8\", errors=\"ignore\") as f:\n        head = [next(f, \"\") for _ in range(sample_lines)]\n    if not head:\n        return default\n    header_raw = head[min(2, len(head)-1)]\n    contains_scg = \"standard_charge|gross\" in header_raw\n    best = default\n    best_score = (-1, -10**9)  # (median_cols, -variance)\n    for d in CANDIDATE_DELIMS:",
+        "detail": "hospital-loader_charge_long-loads-csvs",
+        "documentation": {}
+    },
+    {
+        "label": "find_true_header_row",
+        "kind": 2,
+        "importPath": "hospital-loader_charge_long-loads-csvs",
+        "description": "hospital-loader_charge_long-loads-csvs",
+        "peekOfCode": "def find_true_header_row(path, delim, max_scan=10):\n    with open(path, \"r\", encoding=\"utf-8\", errors=\"ignore\") as f:\n        for i in range(max_scan):\n            line = f.readline()\n            if not line:\n                break\n            cols = [c.strip().lower() for c in line.rstrip(\"\\n\").split(delim)]\n            if \"description\" in cols and sum(1 for c in cols if c.startswith(\"code\")) >= 2:\n                return i\n    return 2  # fallback: row 3 is header",
+        "detail": "hospital-loader_charge_long-loads-csvs",
+        "documentation": {}
+    },
+    {
+        "label": "iter_chunks_with_encoding_fallback",
+        "kind": 2,
+        "importPath": "hospital-loader_charge_long-loads-csvs",
+        "description": "hospital-loader_charge_long-loads-csvs",
+        "peekOfCode": "def iter_chunks_with_encoding_fallback(path, hdr_idx, delim, chunksize):\n    for enc in ENCODING_TRY:\n        try:\n            it = pd.read_csv(\n                path, skiprows=hdr_idx, header=0, dtype=str, sep=delim, engine=\"c\",\n                chunksize=chunksize, on_bad_lines=\"skip\", encoding=enc\n            )\n            for ch in it:\n                yield ch\n            return",
+        "detail": "hospital-loader_charge_long-loads-csvs",
+        "documentation": {}
+    },
+    {
+        "label": "parse_args",
+        "kind": 2,
+        "importPath": "hospital-loader_charge_long-loads-csvs",
+        "description": "hospital-loader_charge_long-loads-csvs",
+        "peekOfCode": "def parse_args():\n    ap = argparse.ArgumentParser()\n    ap.add_argument(\"--data-dir\", default=DEFAULT_DATA_DIR, help=\"Folder containing *.csv files\")\n    ap.add_argument(\"--pg\", default=DEFAULT_PG_DSN, help=\"Postgres connection string\")\n    ap.add_argument(\"--schema\", default=DEFAULT_SCHEMA)\n    ap.add_argument(\"--table\", default=DEFAULT_TABLE)\n    ap.add_argument(\"--delimiter\", default=\",\", help=\"CSV delimiter (default ,)\")\n    ap.add_argument(\"--encoding\", default=\"utf-8\")\n    return ap.parse_args()\ndef clean_name(s):",
+        "detail": "hospital-loader_charge_long-loads-csvs",
+        "documentation": {}
+    },
+    {
+        "label": "clean_name",
+        "kind": 2,
+        "importPath": "hospital-loader_charge_long-loads-csvs",
+        "description": "hospital-loader_charge_long-loads-csvs",
+        "peekOfCode": "def clean_name(s):\n    if s is None:\n        return None\n    return re.sub(r\"\\s+\", \" \", str(s)).strip()\n# ---------- Yield tall rows (your existing logic, unchanged) ----------\ndef yield_tall_rows(meta, chunk):\n    orig_cols = list(chunk.columns)\n    chunk.columns = [str(c).strip() for c in orig_cols]\n    cols_lower = {c.lower(): c for c in chunk.columns}\n    def get_ci(row, *cands):",
+        "detail": "hospital-loader_charge_long-loads-csvs",
+        "documentation": {}
+    },
+    {
+        "label": "yield_tall_rows",
+        "kind": 2,
+        "importPath": "hospital-loader_charge_long-loads-csvs",
+        "description": "hospital-loader_charge_long-loads-csvs",
+        "peekOfCode": "def yield_tall_rows(meta, chunk):\n    orig_cols = list(chunk.columns)\n    chunk.columns = [str(c).strip() for c in orig_cols]\n    cols_lower = {c.lower(): c for c in chunk.columns}\n    def get_ci(row, *cands):\n        for cand in cands:\n            c = cols_lower.get(cand.lower())\n            if c is not None:\n                v = row.get(c)\n                if pd.isna(v) or (isinstance(v, str) and v.strip() == \"\"):",
+        "detail": "hospital-loader_charge_long-loads-csvs",
+        "documentation": {}
+    },
+    {
+        "label": "ensure_table",
+        "kind": 2,
+        "importPath": "hospital-loader_charge_long-loads-csvs",
+        "description": "hospital-loader_charge_long-loads-csvs",
+        "peekOfCode": "def ensure_table(conn, schema, table, required_cols):\n    with conn.cursor() as cur:\n        cur.execute(f'CREATE SCHEMA IF NOT EXISTS \"{schema}\";')\n        cur.execute(DDL)  # safe: IF NOT EXISTS\n        # fetch existing columns\n        cur.execute(\"\"\"\n            SELECT column_name\n            FROM information_schema.columns\n            WHERE table_schema = %s AND table_name = %s\n        \"\"\", (schema, table))",
+        "detail": "hospital-loader_charge_long-loads-csvs",
+        "documentation": {}
+    },
+    {
+        "label": "copy_rows",
+        "kind": 2,
+        "importPath": "hospital-loader_charge_long-loads-csvs",
+        "description": "hospital-loader_charge_long-loads-csvs",
+        "peekOfCode": "def copy_rows(conn, schema, table, rows, columns):\n    import csv\n    from io import StringIO\n    def qident(name: str) -> str:\n        return '\"' + str(name).replace('\"', '\"\"') + '\"'\n    buf = StringIO()\n    writer = csv.writer(\n        buf, delimiter=\",\", quotechar='\"', quoting=csv.QUOTE_ALL,\n        lineterminator=\"\\n\", doublequote=True, escapechar=None\n    )",
+        "detail": "hospital-loader_charge_long-loads-csvs",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "hospital-loader_charge_long-loads-csvs",
+        "description": "hospital-loader_charge_long-loads-csvs",
+        "peekOfCode": "def main():\n    args = parse_args()\n    files = sorted(glob(os.path.join(args.data_dir, \"*.csv\")))\n    if not files:\n        print(\"No CSV files found.\", file=sys.stderr)\n        sys.exit(1)\n    with psycopg.connect(args.pg, autocommit=True) as conn:\n        # Make sure table exists & columns match\n        ensure_table(conn, args.schema, args.table, TARGET_COLS)\n        for path in files:",
+        "detail": "hospital-loader_charge_long-loads-csvs",
+        "documentation": {}
+    },
+    {
+        "label": "DEFAULT_DATA_DIR",
+        "kind": 5,
+        "importPath": "hospital-loader_charge_long-loads-csvs",
+        "description": "hospital-loader_charge_long-loads-csvs",
+        "peekOfCode": "DEFAULT_DATA_DIR = \"/Users/jdd48774/Downloads/hospital-data\"\nDEFAULT_PG_DSN   = \"postgresql://jdd48774:bana@localhost:5437/hospital\"\nDEFAULT_SCHEMA   = \"hp\"\nDEFAULT_TABLE    = \"charge_long\"\n# --------------------------------------------------\nENCODING_TRY = [\"utf-8\", \"utf-8-sig\", \"cp1252\", \"latin-1\"]\nCANDIDATE_DELIMS = [\",\", \"\\t\", \";\"]\nNORM_RE = re.compile(r\"[^a-z0-9|]+\")  # keep letters, digits, and the pipe\ndef norm_key(s: str) -> str:\n    return NORM_RE.sub(\"_\", str(s).strip().lower()).strip(\"_\")",
+        "detail": "hospital-loader_charge_long-loads-csvs",
+        "documentation": {}
+    },
+    {
+        "label": "ENCODING_TRY",
+        "kind": 5,
+        "importPath": "hospital-loader_charge_long-loads-csvs",
+        "description": "hospital-loader_charge_long-loads-csvs",
+        "peekOfCode": "ENCODING_TRY = [\"utf-8\", \"utf-8-sig\", \"cp1252\", \"latin-1\"]\nCANDIDATE_DELIMS = [\",\", \"\\t\", \";\"]\nNORM_RE = re.compile(r\"[^a-z0-9|]+\")  # keep letters, digits, and the pipe\ndef norm_key(s: str) -> str:\n    return NORM_RE.sub(\"_\", str(s).strip().lower()).strip(\"_\")\n# synonyms for meta fields (keys are canonical output names)\nMETA_SYNONYMS = {\n    \"hospital_name\": {\"hospital_name\",\"facility_name\",\"provider_name\",\"hospital\",\"facility\"},\n    \"hospital_location\": {\"hospital_location\",\"location\",\"address_city_state_zip\",\"city_state_zip\",\"city_state_zip_code\"},\n    \"hospital_address\": {\"hospital_address\",\"address\",\"street\",\"street_address\",\"address_line_1\",\"address_1\"},",
+        "detail": "hospital-loader_charge_long-loads-csvs",
+        "documentation": {}
+    },
+    {
+        "label": "CANDIDATE_DELIMS",
+        "kind": 5,
+        "importPath": "hospital-loader_charge_long-loads-csvs",
+        "description": "hospital-loader_charge_long-loads-csvs",
+        "peekOfCode": "CANDIDATE_DELIMS = [\",\", \"\\t\", \";\"]\nNORM_RE = re.compile(r\"[^a-z0-9|]+\")  # keep letters, digits, and the pipe\ndef norm_key(s: str) -> str:\n    return NORM_RE.sub(\"_\", str(s).strip().lower()).strip(\"_\")\n# synonyms for meta fields (keys are canonical output names)\nMETA_SYNONYMS = {\n    \"hospital_name\": {\"hospital_name\",\"facility_name\",\"provider_name\",\"hospital\",\"facility\"},\n    \"hospital_location\": {\"hospital_location\",\"location\",\"address_city_state_zip\",\"city_state_zip\",\"city_state_zip_code\"},\n    \"hospital_address\": {\"hospital_address\",\"address\",\"street\",\"street_address\",\"address_line_1\",\"address_1\"},\n    \"last_updated_on\": {\"last_updated_on\",\"last_updated\",\"updated_on\",\"update_date\",\"date\"},",
+        "detail": "hospital-loader_charge_long-loads-csvs",
+        "documentation": {}
+    },
+    {
+        "label": "NORM_RE",
+        "kind": 5,
+        "importPath": "hospital-loader_charge_long-loads-csvs",
+        "description": "hospital-loader_charge_long-loads-csvs",
+        "peekOfCode": "NORM_RE = re.compile(r\"[^a-z0-9|]+\")  # keep letters, digits, and the pipe\ndef norm_key(s: str) -> str:\n    return NORM_RE.sub(\"_\", str(s).strip().lower()).strip(\"_\")\n# synonyms for meta fields (keys are canonical output names)\nMETA_SYNONYMS = {\n    \"hospital_name\": {\"hospital_name\",\"facility_name\",\"provider_name\",\"hospital\",\"facility\"},\n    \"hospital_location\": {\"hospital_location\",\"location\",\"address_city_state_zip\",\"city_state_zip\",\"city_state_zip_code\"},\n    \"hospital_address\": {\"hospital_address\",\"address\",\"street\",\"street_address\",\"address_line_1\",\"address_1\"},\n    \"last_updated_on\": {\"last_updated_on\",\"last_updated\",\"updated_on\",\"update_date\",\"date\"},\n    \"version\": {\"version\",\"schema_version\",\"file_version\"},",
+        "detail": "hospital-loader_charge_long-loads-csvs",
+        "documentation": {}
+    },
+    {
+        "label": "META_SYNONYMS",
+        "kind": 5,
+        "importPath": "hospital-loader_charge_long-loads-csvs",
+        "description": "hospital-loader_charge_long-loads-csvs",
+        "peekOfCode": "META_SYNONYMS = {\n    \"hospital_name\": {\"hospital_name\",\"facility_name\",\"provider_name\",\"hospital\",\"facility\"},\n    \"hospital_location\": {\"hospital_location\",\"location\",\"address_city_state_zip\",\"city_state_zip\",\"city_state_zip_code\"},\n    \"hospital_address\": {\"hospital_address\",\"address\",\"street\",\"street_address\",\"address_line_1\",\"address_1\"},\n    \"last_updated_on\": {\"last_updated_on\",\"last_updated\",\"updated_on\",\"update_date\",\"date\"},\n    \"version\": {\"version\",\"schema_version\",\"file_version\"},\n    \"license_number|ca\": {\n        \"license_number|ca\",\"license_number\",\"facility_license_number\",\"hospital_license_number\",\n        \"license_no\",\"state_license_number\",\"license\",\"license_number|wa\"\n    },",
+        "detail": "hospital-loader_charge_long-loads-csvs",
+        "documentation": {}
+    },
+    {
+        "label": "SENTINEL_NULLS",
+        "kind": 5,
+        "importPath": "hospital-loader_charge_long-loads-csvs",
+        "description": "hospital-loader_charge_long-loads-csvs",
+        "peekOfCode": "SENTINEL_NULLS = {\n    \"na\",\"n/a\",\"none\",\"null\",\"nan\",\"not disclosed\",\"not_disclosed\",\"not available\",\"n.a.\"\n}\nSENTINEL_BIG = {\"999999999\", \"999999999.0\", \"999999999.00\"}\ndef clean_amount_like(v):\n    if v is None:\n        return None\n    s = str(v).strip()\n    if s == \"\":\n        return None",
+        "detail": "hospital-loader_charge_long-loads-csvs",
+        "documentation": {}
+    },
+    {
+        "label": "SENTINEL_BIG",
+        "kind": 5,
+        "importPath": "hospital-loader_charge_long-loads-csvs",
+        "description": "hospital-loader_charge_long-loads-csvs",
+        "peekOfCode": "SENTINEL_BIG = {\"999999999\", \"999999999.0\", \"999999999.00\"}\ndef clean_amount_like(v):\n    if v is None:\n        return None\n    s = str(v).strip()\n    if s == \"\":\n        return None\n    sl = s.lower()\n    if sl in SENTINEL_NULLS:\n        return None",
+        "detail": "hospital-loader_charge_long-loads-csvs",
+        "documentation": {}
+    },
+    {
+        "label": "WIDE_BASE_COLS_ORDER",
+        "kind": 5,
+        "importPath": "hospital-loader_charge_long-loads-csvs",
+        "description": "hospital-loader_charge_long-loads-csvs",
+        "peekOfCode": "WIDE_BASE_COLS_ORDER = [\n    \"description\",\n    \"code\",\n    \"code|1\", \"code|1|type\",\n    \"code|2\", \"code|2|type\",\n    \"code|3\", \"code|3|type\",\n    \"code|4\", \"code|4|type\",\n    \"code|5\", \"code|5|type\",\n    \"code|6\", \"code|6|type\",\n    \"modifiers\",",
+        "detail": "hospital-loader_charge_long-loads-csvs",
+        "documentation": {}
+    },
+    {
+        "label": "NEGOTIATED_METRICS",
+        "kind": 5,
+        "importPath": "hospital-loader_charge_long-loads-csvs",
+        "description": "hospital-loader_charge_long-loads-csvs",
+        "peekOfCode": "NEGOTIATED_METRICS = {\"negotiated_dollar\", \"negotiated_percentage\", \"negotiated_algorithm\"}\nIGNORE_STANDARD_CHARGE_SUFFIXES = {\"min\", \"max\"}\nCHUNKSIZE = 75_000\ndef parse_args():\n    ap = argparse.ArgumentParser()\n    ap.add_argument(\"--data-dir\", default=DEFAULT_DATA_DIR, help=\"Folder containing *.csv files\")\n    ap.add_argument(\"--pg\", default=DEFAULT_PG_DSN, help=\"Postgres connection string\")\n    ap.add_argument(\"--schema\", default=DEFAULT_SCHEMA)\n    ap.add_argument(\"--table\", default=DEFAULT_TABLE)\n    ap.add_argument(\"--delimiter\", default=\",\", help=\"CSV delimiter (default ,)\")",
+        "detail": "hospital-loader_charge_long-loads-csvs",
+        "documentation": {}
+    },
+    {
+        "label": "IGNORE_STANDARD_CHARGE_SUFFIXES",
+        "kind": 5,
+        "importPath": "hospital-loader_charge_long-loads-csvs",
+        "description": "hospital-loader_charge_long-loads-csvs",
+        "peekOfCode": "IGNORE_STANDARD_CHARGE_SUFFIXES = {\"min\", \"max\"}\nCHUNKSIZE = 75_000\ndef parse_args():\n    ap = argparse.ArgumentParser()\n    ap.add_argument(\"--data-dir\", default=DEFAULT_DATA_DIR, help=\"Folder containing *.csv files\")\n    ap.add_argument(\"--pg\", default=DEFAULT_PG_DSN, help=\"Postgres connection string\")\n    ap.add_argument(\"--schema\", default=DEFAULT_SCHEMA)\n    ap.add_argument(\"--table\", default=DEFAULT_TABLE)\n    ap.add_argument(\"--delimiter\", default=\",\", help=\"CSV delimiter (default ,)\")\n    ap.add_argument(\"--encoding\", default=\"utf-8\")",
+        "detail": "hospital-loader_charge_long-loads-csvs",
+        "documentation": {}
+    },
+    {
+        "label": "CHUNKSIZE",
+        "kind": 5,
+        "importPath": "hospital-loader_charge_long-loads-csvs",
+        "description": "hospital-loader_charge_long-loads-csvs",
+        "peekOfCode": "CHUNKSIZE = 75_000\ndef parse_args():\n    ap = argparse.ArgumentParser()\n    ap.add_argument(\"--data-dir\", default=DEFAULT_DATA_DIR, help=\"Folder containing *.csv files\")\n    ap.add_argument(\"--pg\", default=DEFAULT_PG_DSN, help=\"Postgres connection string\")\n    ap.add_argument(\"--schema\", default=DEFAULT_SCHEMA)\n    ap.add_argument(\"--table\", default=DEFAULT_TABLE)\n    ap.add_argument(\"--delimiter\", default=\",\", help=\"CSV delimiter (default ,)\")\n    ap.add_argument(\"--encoding\", default=\"utf-8\")\n    return ap.parse_args()",
+        "detail": "hospital-loader_charge_long-loads-csvs",
+        "documentation": {}
+    },
+    {
+        "label": "TARGET_COLS",
+        "kind": 5,
+        "importPath": "hospital-loader_charge_long-loads-csvs",
+        "description": "hospital-loader_charge_long-loads-csvs",
+        "peekOfCode": "TARGET_COLS = [\n    \"file_name\",\n    \"hospital_name\", \"hospital_location\", \"hospital_address\", \"license_number|CA\",\n    \"last_updated_on\", \"version\",\n    \"description\", \"drug_unit_of_measurement\", \"drug_type_of_measurement\",\n    \"code\", \"code|1\", \"code|1|type\", \"code|2\", \"code|2|type\", \"code|3\", \"code|3|type\",\n    \"code|4\", \"code|4|type\", \"code|5\", \"code|5|type\", \"code|6\", \"code|6|type\",\n    \"modifiers\", \"setting\", \"billing_class\",\n    \"payer_name\", \"plan_name\",\n    \"estimated_amount\", \"activity_type\",",
+        "detail": "hospital-loader_charge_long-loads-csvs",
+        "documentation": {}
+    },
+    {
+        "label": "DDL",
+        "kind": 5,
+        "importPath": "hospital-loader_charge_long-loads-csvs",
+        "description": "hospital-loader_charge_long-loads-csvs",
+        "peekOfCode": "DDL = f\"\"\"\nCREATE SCHEMA IF NOT EXISTS \"{DEFAULT_SCHEMA}\";\nCREATE TABLE IF NOT EXISTS \"{DEFAULT_SCHEMA}\".\"{DEFAULT_TABLE}\" (\n    \"file_name\" text,\n    \"hospital_name\" text,\n    \"hospital_location\" text,\n    \"hospital_address\" text,\n    \"license_number|CA\" text,\n    \"last_updated_on\" text,\n    \"version\" text,",
+        "detail": "hospital-loader_charge_long-loads-csvs",
+        "documentation": {}
+    },
+    {
         "label": "norm_key",
         "kind": 2,
         "importPath": "hp_long_loader",
@@ -253,7 +848,7 @@
         "kind": 2,
         "importPath": "hp_long_loader",
         "description": "hp_long_loader",
-        "peekOfCode": "def parse_args():\n    ap = argparse.ArgumentParser()\n    ap.add_argument(\"--data-dir\", required=True, help=\"Folder containing *.csv files\")\n    ap.add_argument(\"--pg\", default=DEFAULT_PG_DSN, help=\"Postgres connection string\")\n    ap.add_argument(\"--schema\", default=\"hp\")\n    ap.add_argument(\"--table\", default=\"charge_long\")\n    ap.add_argument(\"--delimiter\", default=\",\", help=\"CSV delimiter (default ,)\")\n    ap.add_argument(\"--encoding\", default=\"utf-8\")\n    return ap.parse_args()\ndef clean_name(s):",
+        "peekOfCode": "def parse_args():\n    ap = argparse.ArgumentParser()\n    ap.add_argument(\"--data-dir\", default=DEFAULT_DATA_DIR, help=\"Folder containing *.csv files\")\n    ap.add_argument(\"--pg\", default=DEFAULT_PG_DSN, help=\"Postgres connection string\")\n    ap.add_argument(\"--schema\", default=DEFAULT_SCHEMA)\n    ap.add_argument(\"--table\", default=DEFAULT_TABLE)\n    ap.add_argument(\"--delimiter\", default=\",\", help=\"CSV delimiter (default ,)\")\n    ap.add_argument(\"--encoding\", default=\"utf-8\")\n    return ap.parse_args()\ndef clean_name(s):",
         "detail": "hp_long_loader",
         "documentation": {}
     },
@@ -290,6 +885,42 @@
         "importPath": "hp_long_loader",
         "description": "hp_long_loader",
         "peekOfCode": "def main():\n    args = parse_args()\n    files = sorted(glob(os.path.join(args.data_dir, \"*.csv\")))\n    if not files:\n        print(\"No CSV files found.\", file=sys.stderr)\n        sys.exit(1)\n    target_cols = [\n        \"file_name\",\n        \"hospital_name\", \"hospital_location\", \"hospital_address\", \"license_number|CA\",\n        \"last_updated_on\", \"version\",",
+        "detail": "hp_long_loader",
+        "documentation": {}
+    },
+    {
+        "label": "DEFAULT_DATA_DIR",
+        "kind": 5,
+        "importPath": "hp_long_loader",
+        "description": "hp_long_loader",
+        "peekOfCode": "DEFAULT_DATA_DIR = \"/Users/jdd48774/Downloads/hospital-data\"\n# DEFAULT_DATA_DIR = \"/Volumes/Lexar/Raw_Data\"\nDEFAULT_PG_DSN = \"postgresql://jdd48774:bana@localhost:5437/hospital\"\nDEFAULT_SCHEMA = \"hp\"\nDEFAULT_TABLE = \"charge_long\"\n# --------------------------------------------------\nENCODING_TRY = [\"utf-8\", \"utf-8-sig\", \"cp1252\", \"latin-1\"]\nCANDIDATE_DELIMS = [\",\", \"\\t\", \";\"]\nNORM_RE = re.compile(r\"[^a-z0-9|]+\")  # keep letters, digits, and the pipe\ndef norm_key(s: str) -> str:",
+        "detail": "hp_long_loader",
+        "documentation": {}
+    },
+    {
+        "label": "DEFAULT_PG_DSN",
+        "kind": 5,
+        "importPath": "hp_long_loader",
+        "description": "hp_long_loader",
+        "peekOfCode": "DEFAULT_PG_DSN = \"postgresql://jdd48774:bana@localhost:5437/hospital\"\nDEFAULT_SCHEMA = \"hp\"\nDEFAULT_TABLE = \"charge_long\"\n# --------------------------------------------------\nENCODING_TRY = [\"utf-8\", \"utf-8-sig\", \"cp1252\", \"latin-1\"]\nCANDIDATE_DELIMS = [\",\", \"\\t\", \";\"]\nNORM_RE = re.compile(r\"[^a-z0-9|]+\")  # keep letters, digits, and the pipe\ndef norm_key(s: str) -> str:\n    # normalize a header to a canonical key: lowercase, collapse spaces/punct to \"_\"\n    return NORM_RE.sub(\"_\", str(s).strip().lower()).strip(\"_\")",
+        "detail": "hp_long_loader",
+        "documentation": {}
+    },
+    {
+        "label": "DEFAULT_SCHEMA",
+        "kind": 5,
+        "importPath": "hp_long_loader",
+        "description": "hp_long_loader",
+        "peekOfCode": "DEFAULT_SCHEMA = \"hp\"\nDEFAULT_TABLE = \"charge_long\"\n# --------------------------------------------------\nENCODING_TRY = [\"utf-8\", \"utf-8-sig\", \"cp1252\", \"latin-1\"]\nCANDIDATE_DELIMS = [\",\", \"\\t\", \";\"]\nNORM_RE = re.compile(r\"[^a-z0-9|]+\")  # keep letters, digits, and the pipe\ndef norm_key(s: str) -> str:\n    # normalize a header to a canonical key: lowercase, collapse spaces/punct to \"_\"\n    return NORM_RE.sub(\"_\", str(s).strip().lower()).strip(\"_\")\n# synonyms for meta fields (keys are canonical output names)",
+        "detail": "hp_long_loader",
+        "documentation": {}
+    },
+    {
+        "label": "DEFAULT_TABLE",
+        "kind": 5,
+        "importPath": "hp_long_loader",
+        "description": "hp_long_loader",
+        "peekOfCode": "DEFAULT_TABLE = \"charge_long\"\n# --------------------------------------------------\nENCODING_TRY = [\"utf-8\", \"utf-8-sig\", \"cp1252\", \"latin-1\"]\nCANDIDATE_DELIMS = [\",\", \"\\t\", \";\"]\nNORM_RE = re.compile(r\"[^a-z0-9|]+\")  # keep letters, digits, and the pipe\ndef norm_key(s: str) -> str:\n    # normalize a header to a canonical key: lowercase, collapse spaces/punct to \"_\"\n    return NORM_RE.sub(\"_\", str(s).strip().lower()).strip(\"_\")\n# synonyms for meta fields (keys are canonical output names)\nMETA_SYNONYMS = {",
         "detail": "hp_long_loader",
         "documentation": {}
     },
@@ -370,7 +1001,7 @@
         "kind": 5,
         "importPath": "hp_long_loader",
         "description": "hp_long_loader",
-        "peekOfCode": "NEGOTIATED_METRICS = {\"negotiated_dollar\", \"negotiated_percentage\", \"negotiated_algorithm\"}\n# Some columns show min/max; we ignore those for the tall row but you can add if needed.\nIGNORE_STANDARD_CHARGE_SUFFIXES = {\"min\", \"max\"}\nCHUNKSIZE = 75_000  # adjust if you hit memory limits\n# ----------------------------\ndef parse_args():\n    ap = argparse.ArgumentParser()\n    ap.add_argument(\"--data-dir\", required=True, help=\"Folder containing *.csv files\")\n    ap.add_argument(\"--pg\", default=DEFAULT_PG_DSN, help=\"Postgres connection string\")\n    ap.add_argument(\"--schema\", default=\"hp\")",
+        "peekOfCode": "NEGOTIATED_METRICS = {\"negotiated_dollar\", \"negotiated_percentage\", \"negotiated_algorithm\"}\n# Some columns show min/max; we ignore those for the tall row but you can add if needed.\nIGNORE_STANDARD_CHARGE_SUFFIXES = {\"min\", \"max\"}\nCHUNKSIZE = 75_000  # adjust if you hit memory limits\n# ----------------------------\ndef parse_args():\n    ap = argparse.ArgumentParser()\n    ap.add_argument(\"--data-dir\", default=DEFAULT_DATA_DIR, help=\"Folder containing *.csv files\")\n    ap.add_argument(\"--pg\", default=DEFAULT_PG_DSN, help=\"Postgres connection string\")\n    ap.add_argument(\"--schema\", default=DEFAULT_SCHEMA)",
         "detail": "hp_long_loader",
         "documentation": {}
     },
@@ -379,7 +1010,7 @@
         "kind": 5,
         "importPath": "hp_long_loader",
         "description": "hp_long_loader",
-        "peekOfCode": "IGNORE_STANDARD_CHARGE_SUFFIXES = {\"min\", \"max\"}\nCHUNKSIZE = 75_000  # adjust if you hit memory limits\n# ----------------------------\ndef parse_args():\n    ap = argparse.ArgumentParser()\n    ap.add_argument(\"--data-dir\", required=True, help=\"Folder containing *.csv files\")\n    ap.add_argument(\"--pg\", default=DEFAULT_PG_DSN, help=\"Postgres connection string\")\n    ap.add_argument(\"--schema\", default=\"hp\")\n    ap.add_argument(\"--table\", default=\"charge_long\")\n    ap.add_argument(\"--delimiter\", default=\",\", help=\"CSV delimiter (default ,)\")",
+        "peekOfCode": "IGNORE_STANDARD_CHARGE_SUFFIXES = {\"min\", \"max\"}\nCHUNKSIZE = 75_000  # adjust if you hit memory limits\n# ----------------------------\ndef parse_args():\n    ap = argparse.ArgumentParser()\n    ap.add_argument(\"--data-dir\", default=DEFAULT_DATA_DIR, help=\"Folder containing *.csv files\")\n    ap.add_argument(\"--pg\", default=DEFAULT_PG_DSN, help=\"Postgres connection string\")\n    ap.add_argument(\"--schema\", default=DEFAULT_SCHEMA)\n    ap.add_argument(\"--table\", default=DEFAULT_TABLE)\n    ap.add_argument(\"--delimiter\", default=\",\", help=\"CSV delimiter (default ,)\")",
         "detail": "hp_long_loader",
         "documentation": {}
     },
@@ -388,7 +1019,7 @@
         "kind": 5,
         "importPath": "hp_long_loader",
         "description": "hp_long_loader",
-        "peekOfCode": "CHUNKSIZE = 75_000  # adjust if you hit memory limits\n# ----------------------------\ndef parse_args():\n    ap = argparse.ArgumentParser()\n    ap.add_argument(\"--data-dir\", required=True, help=\"Folder containing *.csv files\")\n    ap.add_argument(\"--pg\", default=DEFAULT_PG_DSN, help=\"Postgres connection string\")\n    ap.add_argument(\"--schema\", default=\"hp\")\n    ap.add_argument(\"--table\", default=\"charge_long\")\n    ap.add_argument(\"--delimiter\", default=\",\", help=\"CSV delimiter (default ,)\")\n    ap.add_argument(\"--encoding\", default=\"utf-8\")",
+        "peekOfCode": "CHUNKSIZE = 75_000  # adjust if you hit memory limits\n# ----------------------------\ndef parse_args():\n    ap = argparse.ArgumentParser()\n    ap.add_argument(\"--data-dir\", default=DEFAULT_DATA_DIR, help=\"Folder containing *.csv files\")\n    ap.add_argument(\"--pg\", default=DEFAULT_PG_DSN, help=\"Postgres connection string\")\n    ap.add_argument(\"--schema\", default=DEFAULT_SCHEMA)\n    ap.add_argument(\"--table\", default=DEFAULT_TABLE)\n    ap.add_argument(\"--delimiter\", default=\",\", help=\"CSV delimiter (default ,)\")\n    ap.add_argument(\"--encoding\", default=\"utf-8\")",
         "detail": "hp_long_loader",
         "documentation": {}
     },
@@ -552,6 +1183,42 @@
         "description": "load-csv-database",
         "peekOfCode": "PRICE_TYPE_MAP = {\n    \"gross\": \"chargemaster\",\n    \"gross_charge\": \"chargemaster\",\n    \"gross_charges\": \"chargemaster\",\n    \"discounted_cash\": \"cash\",\n    \"negotiated_dollar\": \"negotiated\",\n    \"negotiated_percentage\": \"percentage\",\n    \"min\": \"min\",\n    \"max\": \"max\",\n}",
         "detail": "load-csv-database",
+        "documentation": {}
+    },
+    {
+        "label": "text",
+        "kind": 5,
+        "importPath": "tokenizing-using-nltk",
+        "description": "tokenizing-using-nltk",
+        "peekOfCode": "text = \"Very orderly and methodical he looked, with a hand on each knee, and a loud watch ticking a sonorous sermon under his flapped newly bought waist-coat, as though it pitted its gravity and longevity against the levity and evanescence of the brisk fire.\"\n# tokenise text\ntokens = word_tokenize(text)\nwordnet_lemmatizer = WordNetLemmatizer()\nlemmatized = [wordnet_lemmatizer.lemmatize(token) for token in tokens]\nprint(lemmatized)",
+        "detail": "tokenizing-using-nltk",
+        "documentation": {}
+    },
+    {
+        "label": "tokens",
+        "kind": 5,
+        "importPath": "tokenizing-using-nltk",
+        "description": "tokenizing-using-nltk",
+        "peekOfCode": "tokens = word_tokenize(text)\nwordnet_lemmatizer = WordNetLemmatizer()\nlemmatized = [wordnet_lemmatizer.lemmatize(token) for token in tokens]\nprint(lemmatized)",
+        "detail": "tokenizing-using-nltk",
+        "documentation": {}
+    },
+    {
+        "label": "wordnet_lemmatizer",
+        "kind": 5,
+        "importPath": "tokenizing-using-nltk",
+        "description": "tokenizing-using-nltk",
+        "peekOfCode": "wordnet_lemmatizer = WordNetLemmatizer()\nlemmatized = [wordnet_lemmatizer.lemmatize(token) for token in tokens]\nprint(lemmatized)",
+        "detail": "tokenizing-using-nltk",
+        "documentation": {}
+    },
+    {
+        "label": "lemmatized",
+        "kind": 5,
+        "importPath": "tokenizing-using-nltk",
+        "description": "tokenizing-using-nltk",
+        "peekOfCode": "lemmatized = [wordnet_lemmatizer.lemmatize(token) for token in tokens]\nprint(lemmatized)",
+        "detail": "tokenizing-using-nltk",
         "documentation": {}
     },
     {
